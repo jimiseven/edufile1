@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-01-2025 a las 16:28:45
+-- Tiempo de generación: 18-01-2025 a las 21:51:11
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.1.25
 
@@ -138,7 +138,22 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (7, 'Nombre188', 'ApellidoP798', 'ApellidoM429', 'Masculino', '8089001520155610D', '52188645', '2018-10-07', NULL, NULL, NULL, NULL, NULL),
 (8, 'Nombre539', 'ApellidoP809', 'ApellidoM430', 'Masculino', '8089001520155457L', '52188743', '2023-09-26', NULL, NULL, NULL, NULL, NULL),
 (9, 'Nombre760', 'ApellidoP408', 'ApellidoM761', 'Masculino', '8089001520155762K', '52188542', '2022-01-14', NULL, NULL, NULL, NULL, NULL),
-(10, 'Nombre210', 'ApellidoP150', 'ApellidoM120', 'Femenino', '8089001520155517M', '52188669', '2018-01-22', NULL, NULL, NULL, NULL, NULL);
+(10, 'Nombre210', 'ApellidoP150', 'ApellidoM120', 'Femenino', '8089001520155517M', '52188669', '2018-01-22', NULL, NULL, NULL, NULL, NULL),
+(16, 'Juan', 'Perez', 'Lopez', 'M', '4090000520152771', '1234567', '2008-01-15', NULL, NULL, NULL, NULL, NULL),
+(17, 'Maria', 'Gonzalez', 'Martinez', 'F', '4090000520152772', '2345678', '2008-02-20', NULL, NULL, NULL, NULL, NULL),
+(18, 'Carlos', 'Ramirez', 'Garcia', 'M', '4090000520152773', '3456789', '2008-03-25', NULL, NULL, NULL, NULL, NULL),
+(19, 'Ana', 'Hernandez', 'Fernandez', 'F', '4090000520152774', '4567890', '2008-04-10', NULL, NULL, NULL, NULL, NULL),
+(20, 'Luis', 'Jimenez', 'Castro', 'M', '4090000520152775', '5678901', '2008-05-15', NULL, NULL, NULL, NULL, NULL),
+(21, 'Sofia', 'Lopez', 'Vargas', 'F', '4090000520152776', '6789012', '2008-06-18', NULL, NULL, NULL, NULL, NULL),
+(22, 'Miguel', 'Cruz', 'Torres', 'M', '4090000520152777', '7890123', '2008-07-22', NULL, NULL, NULL, NULL, NULL),
+(23, 'Isabel', 'Morales', 'Rojas', 'F', '4090000520152778', '8901234', '2008-08-30', NULL, NULL, NULL, NULL, NULL),
+(24, 'Diego', 'Ortiz', 'Gutierrez', 'M', '4090000520152779', '9012345', '2008-09-12', NULL, NULL, NULL, NULL, NULL),
+(25, 'Valeria', 'Diaz', 'Cano', 'F', '4090000520152780', '1234568', '2008-10-05', NULL, NULL, NULL, NULL, NULL),
+(26, 'Ricardo', 'Alvarez', 'Silva', 'M', '4090000520152781', '2345679', '2008-11-14', NULL, NULL, NULL, NULL, NULL),
+(27, 'Fernanda', 'Castillo', 'Ramos', 'F', '4090000520152782', '3456780', '2008-12-20', NULL, NULL, NULL, NULL, NULL),
+(28, 'Jorge', 'Reyes', 'Figueroa', 'M', '4090000520152783', '4567891', '2008-01-10', NULL, NULL, NULL, NULL, NULL),
+(29, 'Gabriela', 'Suarez', 'Campos', 'F', '4090000520152784', '5678902', '2008-02-28', NULL, NULL, NULL, NULL, NULL),
+(30, 'Andrea', 'Vega', 'Peña', 'F', '4090000520152785', '6789013', '2008-03-18', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -166,7 +181,22 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (7, 1, 'Efectivo - I'),
 (8, 1, 'Efectivo - I'),
 (9, 1, 'Efectivo - I'),
-(10, 1, 'Efectivo - I');
+(10, 1, 'Efectivo - I'),
+(16, 31, 'Efectivo - I'),
+(17, 31, 'Efectivo - I'),
+(18, 31, 'Efectivo - I'),
+(19, 31, 'Efectivo - I'),
+(20, 31, 'Efectivo - I'),
+(21, 31, 'Efectivo - I'),
+(22, 31, 'Efectivo - I'),
+(23, 31, 'Efectivo - I'),
+(24, 31, 'Efectivo - I'),
+(25, 31, 'Efectivo - I'),
+(26, 31, 'Efectivo - I'),
+(27, 31, 'Efectivo - I'),
+(28, 31, 'Efectivo - I'),
+(29, 31, 'Efectivo - I'),
+(30, 31, 'Efectivo - I');
 
 --
 -- Índices para tablas volcadas
@@ -218,7 +248,7 @@ ALTER TABLE `levels`
 -- AUTO_INCREMENT de la tabla `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Restricciones para tablas volcadas
