@@ -54,12 +54,12 @@
             echo "<h3 class='mb-4'>Curso $grade \"$parallel\"</h3>";
 
             // Consultar estudiantes del curso seleccionado
-            $query = "SELECT CONCAT(last_name_father, ' ', last_name_mother, ' ', first_name) AS nombre,
-                             rude_number, status
-                      FROM students
-                      INNER JOIN student_courses ON students.id = student_courses.student_id
-                      INNER JOIN courses ON student_courses.course_id = courses.id
-                      WHERE courses.grade = ? AND courses.parallel = ?";
+            $query = "SELECT s.id, CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name) AS nombre,
+                             s.rude_number, sc.status
+                      FROM students s
+                      INNER JOIN student_courses sc ON s.id = sc.student_id
+                      INNER JOIN courses c ON sc.course_id = c.id
+                      WHERE c.grade = ? AND c.parallel = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("ss", $grade, $parallel);
             $stmt->execute();
@@ -105,10 +105,10 @@
                                                 <option value='No Inscrito'" . ($row['status'] == 'No Inscrito' ? ' selected' : '') . ">No Inscrito</option>
                                             </select>
                                             <button type='submit' class='btn btn-sm' style='background-color: $estado_color; color: white;'>Guardar</button>
-                                            <input type='hidden' name='student_id' value='" . htmlspecialchars($row['rude_number']) . "'>
+                                            <input type='hidden' name='student_id' value='" . htmlspecialchars($row['id']) . "'>
                                         </form>
                                     </td>
-                                    <td><button class='btn btn-primary btn-sm'>Editar</button></td>
+                                    <td><a href='editarEstudiante.php?student_id=" . htmlspecialchars($row['rude_number']) . "&grade=$grade&parallel=$parallel' class='btn btn-primary btn-sm'>Editar</a></td>
                                   </tr>";
                         }
                     } else {
@@ -122,7 +122,7 @@
             </table>
 
             <div class="text-end">
-                <button class="btn btn-success">Nuevo Estudiante</button>
+                <a href="nuevoEstudiante.php?grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" class="btn btn-success">Nuevo Estudiante</a>
             </div>
         </div>
     </div>
