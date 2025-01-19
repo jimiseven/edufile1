@@ -65,6 +65,7 @@
                 </div>
                 <input type="hidden" name="grade" value="<?php echo htmlspecialchars($_GET['grade']); ?>">
                 <input type="hidden" name="parallel" value="<?php echo htmlspecialchars($_GET['parallel']); ?>">
+                <input type="hidden" name="status" value="No Inscrito">
                 <div class="text-end">
                     <button type="submit" class="btn btn-success">Registrar</button>
                 </div>
