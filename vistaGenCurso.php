@@ -32,7 +32,7 @@
         .table {
             background-color: #2C3E50;
             color: #ffffff;
-            text-transform: uppercase; /* Todas las tablas en mayúsculas */
+            text-transform: uppercase;
         }
 
         .table th {
@@ -57,6 +57,12 @@
 
         .table td form .btn:hover {
             background-color: #16A085;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -100,13 +106,16 @@
 
             $grade = strtoupper(isset($_GET['grade']) ? $_GET['grade'] : '');
             $parallel = strtoupper(isset($_GET['parallel']) ? $_GET['parallel'] : '');
+            $level = isset($_GET['level']) ? $_GET['level'] : '';
 
-            $levelQuery = "SELECT levels.name AS level_name
-                           FROM levels
-                           INNER JOIN courses ON levels.id = courses.level_id
-                           WHERE courses.grade = ? AND courses.parallel = ? LIMIT 1";
+            if (empty($grade) || empty($parallel) || empty($level)) {
+                echo "<div class='error-message'>Error: Faltan datos en la URL.</div>";
+                exit;
+            }
+
+            $levelQuery = "SELECT levels.name AS level_name FROM levels WHERE levels.name = ? LIMIT 1";
             $stmt = $conn->prepare($levelQuery);
-            $stmt->bind_param("ss", $grade, $parallel);
+            $stmt->bind_param("s", $level);
             $stmt->execute();
             $levelResult = $stmt->get_result();
 
@@ -114,27 +123,22 @@
                 $levelData = $levelResult->fetch_assoc();
                 $levelName = strtoupper($levelData['level_name']);
             } else {
-                $levelName = 'NIVEL DESCONOCIDO';
+                echo "<div class='error-message'>Error: Curso no encontrado para este nivel.</div>";
+                exit;
             }
 
             echo "<h2 class='mb-4'>NIVEL: $levelName</h2>";
             echo "<h3 class='mb-4'>CURSO: $grade \"$parallel\"</h3>";
 
-            $query = "SELECT s.id, UPPER(CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name)) AS nombre,
-                             UPPER(s.rude_number) AS rude_number, sc.status
+            $query = "SELECT s.id, UPPER(CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name)) AS nombre, UPPER(s.rude_number) AS rude_number, sc.status
                       FROM students s
                       INNER JOIN student_courses sc ON s.id = sc.student_id
                       INNER JOIN courses c ON sc.course_id = c.id
-                      WHERE c.grade = ? AND c.parallel = ?
-                      ORDER BY
-                        FIELD(sc.status, 'Efectivo - I', 'No Inscrito') DESC,
-                        CASE WHEN s.last_name_father IS NULL OR s.last_name_father = '' THEN 0 ELSE 1 END ASC,
-                        s.last_name_father ASC,
-                        s.last_name_mother ASC,
-                        s.first_name ASC";
+                      WHERE c.grade = ? AND c.parallel = ? AND c.level_id = (SELECT id FROM levels WHERE name = ?)
+                      ORDER BY FIELD(sc.status, 'Efectivo - I', 'No Inscrito') DESC, s.last_name_father ASC, s.last_name_mother ASC, s.first_name ASC";
 
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("ss", $grade, $parallel);
+            $stmt->bind_param("sss", $grade, $parallel, $level);
             $stmt->execute();
             $result = $stmt->get_result();
             ?>
@@ -145,7 +149,7 @@
                     <button class="btn btn-light" id="clearSearch" title="Borrar búsqueda">&times;</button>
                 </div>
                 <div>
-                    <a href="vistaPDF.php?grade=<?php echo urlencode($grade); ?>&parallel=<?php echo urlencode($parallel); ?>" class="btn btn-secondary" target="_blank">Vista PDF</a>
+                    <a href="vistaPDF.php?grade=<?php echo urlencode($grade); ?>&parallel=<?php echo urlencode($parallel); ?>&level=<?php echo urlencode($level); ?>" class="btn btn-secondary" target="_blank">Vista PDF</a>
                     <a href="nuevoEstudiante.php?grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" class="btn btn-success">Nuevo Estudiante</a>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             margin-top: 20px;
             border-radius: 5px;
             font-size: 18px;
+            text-align: center;
         }
 
         .parallel-row {
@@ -25,8 +27,33 @@
             margin: 5px 0;
             border-radius: 5px;
         }
+
+        .course-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .course-column {
+            flex: 1 1 calc(50% - 20px);
+            background-color: #34495E;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .main-content {
+            background-color: #1E2A38;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .course-column {
+                flex: 1 1 100%;
+            }
+        }
     </style>
 </head>
+
 <body style="background-color: #1E2A38; color: #ffffff;">
     <div class="d-flex">
         <!-- Sidebar -->
@@ -60,52 +87,48 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content flex-grow-1 p-4" style="background-color: #1E2A38; color: #ffffff;">
+        <div class="main-content flex-grow-1 p-4">
             <h2 class="mb-4">Nivel Inicial</h2>
 
-            <?php
-            // Incluir el archivo de conexión
-            include 'conexion.php';
+            <div class="course-group">
+                <?php
+                // Incluir el archivo de conexión
+                include 'conexion.php';
 
-            // Consultar cursos del nivel inicial
-            $query = "SELECT grade, parallel FROM courses WHERE level_id = 1 ORDER BY grade, parallel";
-            $result = $conn->query($query);
+                // Consultar cursos del nivel inicial
+                $query = "SELECT grade, parallel FROM courses WHERE level_id = 1 ORDER BY grade, parallel";
+                $result = $conn->query($query);
 
-            $currentGrade = null;
+                $courseData = [];
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    // Verificar si el curso ha cambiado
-                    if ($currentGrade !== $row['grade']) {
-                        if ($currentGrade !== null) {
-                            echo "</div>"; // Cerrar el contenedor del curso anterior
-                        }
-
-                        $currentGrade = $row['grade'];
-                        echo "<div class='course-header'>CURSO: " . htmlspecialchars($currentGrade) . "</div>";
-                        echo "<div class='course-parallels'>"; // Iniciar el contenedor de paralelos
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $courseData[$row['grade']][] = $row['parallel'];
                     }
-
-                    // Mostrar el paralelo
-                    echo "<div class='parallel-row'>
-                            <span>Paralelo: " . htmlspecialchars($row['parallel']) . "</span>
-                            <a href='vistaGenCurso.php?grade=" . urlencode($row['grade']) . "&parallel=" . urlencode($row['parallel']) . "' class='btn btn-primary btn-sm ms-3'>Ver</a>
-                          </div>";
                 }
 
-                echo "</div>"; // Cerrar el último contenedor de paralelos
-            } else {
-                echo "<div class='text-center' style='background-color: #2874A6; color: #ffffff; padding: 10px; border-radius: 5px;'>No hay cursos disponibles</div>";
-            }
+                foreach (array_chunk($courseData, 3, true) as $courseChunk) {
+                    echo '<div class="course-column">';
+                    foreach ($courseChunk as $grade => $parallels) {
+                        echo "<div class='course-header'>CURSO: " . htmlspecialchars($grade) . "</div>";
+                        foreach ($parallels as $parallel) {
+                            echo "<div class='parallel-row'>
+                                    <span>Paralelo: " . htmlspecialchars($parallel) . "</span>
+                                    <a href='vistaGenCurso.php?grade=" . urlencode($grade) . "&parallel=" . urlencode($parallel) . "&level=inicial' class='btn btn-primary btn-sm ms-3'>Ver</a>
+                                  </div>";
+                        }
+                    }
+                    echo '</div>';
+                }
 
-            // Cerrar la conexión
-            $conn->close();
-            ?>
-
+                $conn->close();
+                ?>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

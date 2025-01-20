@@ -45,6 +45,12 @@
             background-color: #1E2A38;
             color: #ffffff;
         }
+
+        @media (max-width: 768px) {
+            .course-column {
+                flex: 1 1 100%;
+            }
+        }
     </style>
 </head>
 
@@ -93,7 +99,6 @@
                 $query = "SELECT grade, parallel FROM courses WHERE level_id = 2 ORDER BY grade, parallel";
                 $result = $conn->query($query);
 
-                $currentGrade = null;
                 $courseData = [];
 
                 if ($result->num_rows > 0) {
@@ -109,7 +114,7 @@
                         foreach ($parallels as $parallel) {
                             echo "<div class='parallel-row'>
                                     <span>Paralelo: " . htmlspecialchars($parallel) . "</span>
-                                    <a href='vistaGenCurso.php?grade=" . urlencode($grade) . "&parallel=" . urlencode($parallel) . "' class='btn btn-primary btn-sm ms-3'>Ver</a>
+                                    <a href='vistaGenCurso.php?grade=" . urlencode($grade) . "&parallel=" . urlencode($parallel) . "&level=Primario' class='btn btn-primary btn-sm ms-3'>Ver</a>
                                   </div>";
                         }
                     }

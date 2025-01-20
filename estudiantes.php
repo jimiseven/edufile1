@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link text-white" href="#">
+                    <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
                     </a>
                 </div>
