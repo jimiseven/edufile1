@@ -41,6 +41,17 @@ $student = $result->fetch_assoc();
         select {
             text-transform: uppercase;
         }
+
+        .form-section {
+            background-color: #2C3E50;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h4 {
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -64,7 +75,7 @@ $student = $result->fetch_assoc();
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link text-white" href="#">
+                    <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
                     </a>
                 </div>
@@ -83,19 +94,21 @@ $student = $result->fetch_assoc();
                 <input type="hidden" name="original_rude" value="<?php echo htmlspecialchars($student['rude_number']); ?>">
                 <input type="hidden" name="grade" value="<?php echo htmlspecialchars($grade); ?>">
                 <input type="hidden" name="parallel" value="<?php echo htmlspecialchars($parallel); ?>">
-                <div class="mb-3 p-3" style="background-color: #2C3E50; border-radius: 10px;">
-                    <h4 class="mb-2">Información del Estudiante</h4>
+
+                <!-- Información del Estudiante -->
+                <div class="form-section">
+                    <h4>Información del Estudiante</h4>
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="first_name" class="form-label">Nombres</label>
                             <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($student['first_name']); ?>" required>
                         </div>
                         <div class="col-md-4">
-                            <label for="last_name_father" class="form-label">A Paterno</label>
+                            <label for="last_name_father" class="form-label">Apellido Paterno</label>
                             <input type="text" class="form-control" id="last_name_father" name="last_name_father" value="<?php echo htmlspecialchars($student['last_name_father']); ?>">
                         </div>
                         <div class="col-md-4">
-                            <label for="last_name_mother" class="form-label">A Materno</label>
+                            <label for="last_name_mother" class="form-label">Apellido Materno</label>
                             <input type="text" class="form-control" id="last_name_mother" name="last_name_mother" value="<?php echo htmlspecialchars($student['last_name_mother']); ?>">
                         </div>
                     </div>
@@ -112,7 +125,7 @@ $student = $result->fetch_assoc();
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="birth_date" class="form-label">Fecha Nacimiento</label>
+                            <label for="birth_date" class="form-label">Fecha de Nacimiento</label>
                             <input type="date" class="form-control" id="birth_date" name="birth_date" value="<?php echo htmlspecialchars($student['birth_date']); ?>">
                         </div>
                         <div class="col-md-3">
@@ -122,8 +135,9 @@ $student = $result->fetch_assoc();
                     </div>
                 </div>
 
-                <div class="mb-3 p-3" style="background-color: #2C3E50; border-radius: 10px;">
-                    <h4 class="mb-2">Información del Responsable</h4>
+                <!-- Información del Responsable -->
+                <div class="form-section">
+                    <h4>Información del Responsable</h4>
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="guardian_first_name" class="form-label">Nombres</label>
@@ -158,7 +172,6 @@ $student = $result->fetch_assoc();
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                     <a href="volanteEstudiante.php?student_id=<?php echo $student_id; ?>&grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" target="_blank" class="btn btn-secondary">Vista Volante</a>
                 </div>
-
             </form>
         </div>
     </div>
