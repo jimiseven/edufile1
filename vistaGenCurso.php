@@ -24,21 +24,71 @@
         .search-container input {
             margin-right: 10px;
         }
+
+        .estado-select {
+            min-width: 150px;
+        }
+
+        .table {
+            background-color: #2C3E50;
+            color: #ffffff;
+        }
+
+        .table th {
+            background-color: #34495E;
+            color: #ECF0F1;
+        }
+
+        .table td {
+            background-color: #3E4A59;
+            color: #ECF0F1;
+        }
+
+        .table td form .estado-select {
+            background-color: #3E4A59;
+            color: #ffffff;
+        }
+
+        .table td form .btn {
+            background-color: #1ABC9C;
+            color: #ffffff;
+        }
+
+        .table td form .btn:hover {
+            background-color: #16A085;
+        }
     </style>
 </head>
 
 <body style="background-color: #1E2A38; color: #ffffff;">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-3" style="background-color: #283848; color: #ffffff;">
+        <div class="sidebar p-3" style="background-color: #000; color: #fff; min-width: 250px;">
             <h3 class="text-center">EduFile</h3>
             <nav class="nav flex-column">
-                <a href="#" class="nav-link text-white">Cursos</a>
-                <a href="inicialCursos.php" class="nav-link text-white">Inicial</a>
-                <a href="primariaCursos.php" class="nav-link text-white">Primaria</a>
-                <a href="secundariaCursos.php" class="nav-link text-white">Secundaria</a>
-                <a href="#" class="nav-link text-white">Estudiantes</a>
-                <a href="#" class="nav-link text-white">Profesores</a>
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-house-door"></i> Inicio
+                </a>
+                <div>
+                    <a class="nav-link text-white" data-bs-toggle="collapse" href="#nivelMenu" role="button" aria-expanded="false" aria-controls="nivelMenu">
+                        <i class="bi bi-box"></i> Niveles
+                    </a>
+                    <div class="collapse ms-3" id="nivelMenu">
+                        <a href="inicialCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Inicial</a>
+                        <a href="primariaCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Primaria</a>
+                        <a href="secundariaCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Secundaria</a>
+                    </div>
+                </div>
+                <div>
+                    <a class="nav-link text-white" href="#">
+                        <i class="bi bi-people"></i> Estudiantes
+                    </a>
+                </div>
+                <div>
+                    <a class="nav-link text-white" href="#">
+                        <i class="bi bi-person"></i> Profesores
+                    </a>
+                </div>
             </nav>
         </div>
 
@@ -100,7 +150,7 @@
             </div>
 
             <table class="table table-bordered" id="studentsTable">
-                <thead style="background-color: #1F618D; color: #ffffff;">
+                <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Rude</th>
@@ -117,23 +167,23 @@
                                 'No Inscrito' => '#dc3545',
                                 default => '#6c757d',
                             };
-                            echo "<tr style='background-color: #34495E; color: #ffffff;'>
+                            echo "<tr>
                                     <td>" . htmlspecialchars($row['nombre']) . "</td>
                                     <td>" . htmlspecialchars($row['rude_number']) . "</td>
                                     <td>
-                                        <form class='estado-form' data-student-id='" . htmlspecialchars($row['id']) . "' data-grade='$grade' data-parallel='$parallel'>
-                                            <select name='estado' class='form-select form-select-sm estado-select' style='width: auto; background-color: $estado_color; color: white;'>
+                                        <form class='estado-form d-flex align-items-center' data-student-id='" . htmlspecialchars($row['id']) . "' data-grade='$grade' data-parallel='$parallel'>
+                                            <select name='estado' class='form-select form-select-sm estado-select me-2' style='background-color: $estado_color; color: white;'>
                                                 <option value='Efectivo - I'" . ($row['status'] == 'Efectivo - I' ? ' selected' : '') . ">Efectivo - I</option>
                                                 <option value='No Inscrito'" . ($row['status'] == 'No Inscrito' ? ' selected' : '') . ">No Inscrito</option>
                                             </select>
-                                            <button type='button' class='btn btn-sm estado-guardar' style='background-color: $estado_color; color: white;'>Guardar</button>
+                                            <button type='button' class='btn btn-sm estado-guardar'>Guardar</button>
                                         </form>
                                     </td>
                                     <td><a href='editarEstudiante.php?student_id=" . htmlspecialchars($row['rude_number']) . "&grade=$grade&parallel=$parallel' class='btn btn-primary btn-sm'>Editar</a></td>
                                   </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='4' class='text-center' style='background-color: #34495E; color: #ffffff;'>No hay estudiantes disponibles</td></tr>";
+                        echo "<tr><td colspan='4' class='text-center'>No hay estudiantes disponibles</td></tr>";
                     }
 
                     $stmt->close();
@@ -164,29 +214,36 @@
                     const estado = select.value;
 
                     fetch('cambiarEstado.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ student_id: studentId, estado, grade, parallel })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const newColor = data.color;
-                            select.style.backgroundColor = newColor;
-                            button.style.backgroundColor = newColor;
-                            alert('Estado actualizado correctamente.');
-                        } else {
-                            alert('Error al actualizar el estado: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Ocurrió un error al intentar actualizar el estado.');
-                    });
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: new URLSearchParams({
+                                student_id: studentId,
+                                estado,
+                                grade,
+                                parallel
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const newColor = data.color;
+                                select.style.backgroundColor = newColor;
+                                button.style.backgroundColor = newColor;
+                                alert('Estado actualizado correctamente.');
+                            } else {
+                                alert('Error al actualizar el estado: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Ocurrió un error al intentar actualizar el estado.');
+                        });
                 });
             });
 
-            searchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function() {
                 const searchValue = this.value.toLowerCase();
 
                 for (let i = 1; i < rows.length; i++) {
@@ -202,7 +259,7 @@
                 }
             });
 
-            clearButton.addEventListener('click', function () {
+            clearButton.addEventListener('click', function() {
                 searchInput.value = '';
                 for (let i = 1; i < rows.length; i++) {
                     rows[i].style.display = '';
