@@ -37,7 +37,8 @@ $student = $result->fetch_assoc();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        input[type="text"], select {
+        input[type="text"],
+        select {
             text-transform: uppercase;
         }
     </style>
@@ -155,7 +156,9 @@ $student = $result->fetch_assoc();
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <a href="volanteEstudiante.php?student_id=<?php echo $student_id; ?>&grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" target="_blank" class="btn btn-secondary">Vista Volante</a>
                 </div>
+
             </form>
         </div>
     </div>
