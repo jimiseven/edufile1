@@ -2,6 +2,7 @@
 include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Datos del estudiante
     $first_name = $_POST['first_name'];
     $last_name_father = $_POST['last_name_father'];
     $last_name_mother = $_POST['last_name_mother'];
@@ -13,11 +14,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parallel = $_POST['parallel'];
     $status = $_POST['status']; // "No Inscrito"
 
+    // Datos del responsable
+    $guardian_first_name = $_POST['guardian_first_name'];
+    $guardian_last_name = $_POST['guardian_last_name'];
+    $guardian_identity_card = $_POST['guardian_identity_card'];
+    $guardian_phone_number = $_POST['guardian_phone_number'];
+    $guardian_relationship = $_POST['guardian_relationship'];
+
     // Insertar nuevo estudiante en la tabla `students`
-    $queryInsertStudent = "INSERT INTO students (first_name, last_name_father, last_name_mother, identity_card, gender, birth_date, rude_number)
-                           VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $queryInsertStudent = "
+        INSERT INTO students (
+            first_name, last_name_father, last_name_mother, identity_card, gender, birth_date, rude_number,
+            guardian_first_name, guardian_last_name, guardian_identity_card, guardian_phone_number, guardian_relationship
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ";
     $stmtStudent = $conn->prepare($queryInsertStudent);
-    $stmtStudent->bind_param("sssssss", $first_name, $last_name_father, $last_name_mother, $identity_card, $gender, $birth_date, $rude_number);
+    $stmtStudent->bind_param(
+        "ssssssssssss",
+        $first_name,
+        $last_name_father,
+        $last_name_mother,
+        $identity_card,
+        $gender,
+        $birth_date,
+        $rude_number,
+        $guardian_first_name,
+        $guardian_last_name,
+        $guardian_identity_card,
+        $guardian_phone_number,
+        $guardian_relationship
+    );
     $stmtStudent->execute();
     $student_id = $stmtStudent->insert_id;
 
