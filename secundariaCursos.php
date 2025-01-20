@@ -8,6 +8,44 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .course-header {
+            background-color: #1F618D;
+            color: #ffffff;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .parallel-row {
+            background-color: #2874A6;
+            color: #ffffff;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .course-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .course-column {
+            flex: 1 1 calc(50% - 20px);
+            background-color: #34495E;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .main-content {
+            background-color: #1E2A38;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body style="background-color: #1E2A38; color: #ffffff;">
@@ -43,42 +81,44 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content flex-grow-1 p-4" style="background-color: #1E2A38; color: #ffffff;">
+        <div class="main-content flex-grow-1 p-4">
             <h2 class="mb-4">Nivel Secundaria</h2>
-            <table class="table table-bordered">
-                <thead style="background-color: #1F618D; color: #ffffff;">
-                    <tr>
-                        <th>CURSO</th>
-                        <th>PARALELO</th>
-                        <th>ACCIÓN</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Incluir el archivo de conexión
-                    include 'conexion.php';
 
-                    // Consultar cursos del nivel secundaria
-                    $query = "SELECT grade, parallel FROM courses WHERE level_id = 3"; // Nivel secundaria (level_id = 3)
-                    $result = $conn->query($query);
+            <div class="course-group">
+                <?php
+                // Incluir el archivo de conexión
+                include 'conexion.php';
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr style='background-color: #2874A6; color: #ffffff;'>
-                                    <td>" . htmlspecialchars($row['grade']) . "</td>
-                                    <td>" . htmlspecialchars($row['parallel']) . "</td>
-                                    <td><a href='vistaGenCurso.php?grade=" . $row['grade'] . "&parallel=" . $row['parallel'] . "' class='btn btn-primary btn-sm' style='background-color: #28B463; border-color: #28B463;'>Ver</a></td>
-                                  </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='3' class='text-center' style='background-color: #2874A6; color: #ffffff;'>No hay cursos disponibles</td></tr>";
+                // Consultar cursos del nivel secundaria
+                $query = "SELECT grade, parallel FROM courses WHERE level_id = 3 ORDER BY grade, parallel";
+                $result = $conn->query($query);
+
+                $currentGrade = null;
+                $courseData = [];
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $courseData[$row['grade']][] = $row['parallel'];
                     }
+                }
 
-                    // Cerrar la conexión
-                    $conn->close();
-                    ?>
-                </tbody>
-            </table>
+                foreach (array_chunk($courseData, 3, true) as $courseChunk) {
+                    echo '<div class="course-column">';
+                    foreach ($courseChunk as $grade => $parallels) {
+                        echo "<div class='course-header'>CURSO: " . htmlspecialchars($grade) . "</div>";
+                        foreach ($parallels as $parallel) {
+                            echo "<div class='parallel-row'>
+                                    <span>Paralelo: " . htmlspecialchars($parallel) . "</span>
+                                    <a href='vistaGenCurso.php?grade=" . urlencode($grade) . "&parallel=" . urlencode($parallel) . "' class='btn btn-primary btn-sm ms-3'>Ver</a>
+                                  </div>";
+                        }
+                    }
+                    echo '</div>';
+                }
+
+                $conn->close();
+                ?>
+            </div>
         </div>
     </div>
 

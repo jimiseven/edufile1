@@ -87,11 +87,13 @@
         $levelData = $levelResult->fetch_assoc();
         $levelName = $levelData['level_name'];
     } else {
-        $levelName = 'Nivel Desconocido';
+        $levelName = 'NIVEL DESCONOCIDO';
     }
 
     // Obtener estudiantes con estado "Efectivo - I"
-    $query = "SELECT s.last_name_father, s.last_name_mother, s.first_name
+    $query = "SELECT UPPER(s.last_name_father) AS last_name_father,
+                     UPPER(s.last_name_mother) AS last_name_mother,
+                     UPPER(s.first_name) AS first_name
               FROM students s
               INNER JOIN student_courses sc ON s.id = sc.student_id
               INNER JOIN courses c ON sc.course_id = c.id
@@ -110,10 +112,10 @@
     <a href="javascript:window.print();" class="btn btn-primary btn-print">Imprimir</a>
 
     <div class="header">
-        <h1>U.E. Simón Bolívar</h1>
-        <h2>Lista de Estudiantes</h2>
-        <h2>Nivel: <?php echo htmlspecialchars($levelName); ?></h2>
-        <h2>Curso: <?php echo htmlspecialchars($grade . ' "' . $parallel . '"'); ?></h2>
+        <h1>U.E. SIMÓN BOLÍVAR</h1>
+        <h2>LISTA DE ESTUDIANTES</h2>
+        <h2>NIVEL: <?php echo htmlspecialchars($levelName); ?></h2>
+        <h2>CURSO: <?php echo htmlspecialchars($grade . ' "' . $parallel . '"'); ?></h2>
     </div>
 
     <div class="table-container">
@@ -121,9 +123,9 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
-                    <th>Nombre</th>
+                    <th>APELLIDO PATERNO</th>
+                    <th>APELLIDO MATERNO</th>
+                    <th>NOMBRE</th>
                     <th></th>
                     <th></th>
                     <th></th>

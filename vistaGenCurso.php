@@ -32,6 +32,7 @@
         .table {
             background-color: #2C3E50;
             color: #ffffff;
+            text-transform: uppercase; /* Todas las tablas en mayúsculas */
         }
 
         .table th {
@@ -97,8 +98,8 @@
             <?php
             include 'conexion.php';
 
-            $grade = isset($_GET['grade']) ? $_GET['grade'] : '';
-            $parallel = isset($_GET['parallel']) ? $_GET['parallel'] : '';
+            $grade = strtoupper(isset($_GET['grade']) ? $_GET['grade'] : '');
+            $parallel = strtoupper(isset($_GET['parallel']) ? $_GET['parallel'] : '');
 
             $levelQuery = "SELECT levels.name AS level_name
                            FROM levels
@@ -111,16 +112,16 @@
 
             if ($levelResult && $levelResult->num_rows > 0) {
                 $levelData = $levelResult->fetch_assoc();
-                $levelName = $levelData['level_name'];
+                $levelName = strtoupper($levelData['level_name']);
             } else {
-                $levelName = 'Nivel Desconocido';
+                $levelName = 'NIVEL DESCONOCIDO';
             }
 
-            echo "<h2 class='mb-4'>Nivel: $levelName</h2>";
-            echo "<h3 class='mb-4'>Curso $grade \"$parallel\"</h3>";
+            echo "<h2 class='mb-4'>NIVEL: $levelName</h2>";
+            echo "<h3 class='mb-4'>CURSO: $grade \"$parallel\"</h3>";
 
-            $query = "SELECT s.id, CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name) AS nombre,
-                             s.rude_number, sc.status
+            $query = "SELECT s.id, UPPER(CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name)) AS nombre,
+                             UPPER(s.rude_number) AS rude_number, sc.status
                       FROM students s
                       INNER JOIN student_courses sc ON s.id = sc.student_id
                       INNER JOIN courses c ON sc.course_id = c.id
@@ -183,7 +184,7 @@
                                   </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='4' class='text-center'>No hay estudiantes disponibles</td></tr>";
+                        echo "<tr><td colspan='4' class='text-center'>NO HAY ESTUDIANTES DISPONIBLES</td></tr>";
                     }
 
                     $stmt->close();

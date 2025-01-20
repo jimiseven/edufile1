@@ -7,8 +7,8 @@ if (!isset($_GET['student_id']) || !isset($_GET['grade']) || !isset($_GET['paral
 }
 
 $student_id = $_GET['student_id'];
-$grade = $_GET['grade'];
-$parallel = $_GET['parallel'];
+$grade = strtoupper($_GET['grade']);
+$parallel = strtoupper($_GET['parallel']);
 
 // Obtener datos del estudiante
 $query = "SELECT 
@@ -28,8 +28,8 @@ if ($result->num_rows === 0) {
 
 $student = $result->fetch_assoc();
 
-// Formatear nombre del estudiante y del responsable
-$nombre_estudiante = trim($student['last_name_father'] . ' ' . $student['last_name_mother'] . ' ' . $student['first_name']);
+// Formatear nombre del estudiante y del responsable en mayúsculas
+$nombre_estudiante = strtoupper(trim($student['last_name_father'] . ' ' . $student['last_name_mother'] . ' ' . $student['first_name']));
 $nombre_responsable = strtoupper(trim($student['guardian_last_name'] . ' ' . $student['guardian_first_name']));
 ?>
 
@@ -45,6 +45,7 @@ $nombre_responsable = strtoupper(trim($student['guardian_last_name'] . ' ' . $st
             margin: 0;
             padding: 20px;
             color: #000;
+            text-transform: uppercase; /* Todo el contenido en mayúsculas */
         }
         .volante-container {
             margin: 0;

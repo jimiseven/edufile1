@@ -8,6 +8,24 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .course-header {
+            background-color: #1F618D;
+            color: #ffffff;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .parallel-row {
+            background-color: #2874A6;
+            color: #ffffff;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body style="background-color: #1E2A38; color: #ffffff;">
     <div class="d-flex">
@@ -44,40 +62,46 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4" style="background-color: #1E2A38; color: #ffffff;">
             <h2 class="mb-4">Nivel Inicial</h2>
-            <table class="table table-bordered">
-                <thead style="background-color: #1F618D; color: #ffffff;">
-                    <tr>
-                        <th>CURSO</th>
-                        <th>PARALELO</th>
-                        <th>ACCIÓN</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Incluir el archivo de conexión
-                    include 'conexion.php';
 
-                    // Consultar cursos del nivel inicial
-                    $query = "SELECT grade, parallel FROM courses WHERE level_id = 1"; // Nivel inicial (level_id = 1)
-                    $result = $conn->query($query);
+            <?php
+            // Incluir el archivo de conexión
+            include 'conexion.php';
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr style='background-color: #2874A6; color: #ffffff;'>
-                                    <td>" . htmlspecialchars($row['grade']) . "</td>
-                                    <td>" . htmlspecialchars($row['parallel']) . "</td>
-                                    <td><a href='vistaGenCurso.php?grade=" . $row['grade'] . "&parallel=" . $row['parallel'] . "' class='btn btn-primary btn-sm' style='background-color: #28B463; border-color: #28B463;'>Ver</a></td>
-                                  </tr>";
+            // Consultar cursos del nivel inicial
+            $query = "SELECT grade, parallel FROM courses WHERE level_id = 1 ORDER BY grade, parallel";
+            $result = $conn->query($query);
+
+            $currentGrade = null;
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    // Verificar si el curso ha cambiado
+                    if ($currentGrade !== $row['grade']) {
+                        if ($currentGrade !== null) {
+                            echo "</div>"; // Cerrar el contenedor del curso anterior
                         }
-                    } else {
-                        echo "<tr><td colspan='3' class='text-center' style='background-color: #2874A6; color: #ffffff;'>No hay cursos disponibles</td></tr>";
+
+                        $currentGrade = $row['grade'];
+                        echo "<div class='course-header'>CURSO: " . htmlspecialchars($currentGrade) . "</div>";
+                        echo "<div class='course-parallels'>"; // Iniciar el contenedor de paralelos
                     }
 
-                    // Cerrar la conexión
-                    $conn->close();
-                    ?>
-                </tbody>
-            </table>
+                    // Mostrar el paralelo
+                    echo "<div class='parallel-row'>
+                            <span>Paralelo: " . htmlspecialchars($row['parallel']) . "</span>
+                            <a href='vistaGenCurso.php?grade=" . urlencode($row['grade']) . "&parallel=" . urlencode($row['parallel']) . "' class='btn btn-primary btn-sm ms-3'>Ver</a>
+                          </div>";
+                }
+
+                echo "</div>"; // Cerrar el último contenedor de paralelos
+            } else {
+                echo "<div class='text-center' style='background-color: #2874A6; color: #ffffff; padding: 10px; border-radius: 5px;'>No hay cursos disponibles</div>";
+            }
+
+            // Cerrar la conexión
+            $conn->close();
+            ?>
+
         </div>
     </div>
 

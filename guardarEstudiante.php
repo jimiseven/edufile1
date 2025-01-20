@@ -3,23 +3,23 @@ include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Datos del estudiante
-    $first_name = $_POST['first_name'];
-    $last_name_father = $_POST['last_name_father'];
-    $last_name_mother = $_POST['last_name_mother'];
-    $identity_card = $_POST['identity_card'];
-    $gender = $_POST['gender'];
-    $birth_date = $_POST['birth_date'];
-    $rude_number = $_POST['rude_number'];
-    $grade = $_POST['grade'];
-    $parallel = $_POST['parallel'];
-    $status = $_POST['status']; // "No Inscrito"
+    $first_name = strtoupper($_POST['first_name']);
+    $last_name_father = strtoupper($_POST['last_name_father']);
+    $last_name_mother = strtoupper($_POST['last_name_mother']);
+    $identity_card = strtoupper($_POST['identity_card']);
+    $gender = strtoupper($_POST['gender']);
+    $birth_date = $_POST['birth_date']; // No es necesario convertir fechas a mayúsculas
+    $rude_number = strtoupper($_POST['rude_number']);
+    $grade = strtoupper($_POST['grade']);
+    $parallel = strtoupper($_POST['parallel']);
+    $status = strtoupper($_POST['status']); // "No Inscrito"
 
     // Datos del responsable
-    $guardian_first_name = $_POST['guardian_first_name'];
-    $guardian_last_name = $_POST['guardian_last_name'];
-    $guardian_identity_card = $_POST['guardian_identity_card'];
-    $guardian_phone_number = $_POST['guardian_phone_number'];
-    $guardian_relationship = $_POST['guardian_relationship'];
+    $guardian_first_name = strtoupper($_POST['guardian_first_name']);
+    $guardian_last_name = strtoupper($_POST['guardian_last_name']);
+    $guardian_identity_card = strtoupper($_POST['guardian_identity_card']);
+    $guardian_phone_number = strtoupper($_POST['guardian_phone_number']);
+    $guardian_relationship = strtoupper($_POST['guardian_relationship']);
 
     // Insertar nuevo estudiante en la tabla `students`
     $queryInsertStudent = "
