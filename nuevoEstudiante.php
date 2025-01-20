@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     <a class="nav-link text-white" href="#">
-                        <i class="bi bi-people"></i> Estudiantes
+                        <i class="bi bi-people"></i> Estudiantess
                     </a>
                 </div>
                 <div>
