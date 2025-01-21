@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-01-2025 a las 18:35:25
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Tiempo de generación: 21-01-2025 a las 12:21:31
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,7 +32,7 @@ CREATE TABLE `courses` (
   `level_id` bigint(20) DEFAULT NULL,
   `grade` int(11) NOT NULL,
   `parallel` enum('A','B','C') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `courses`
@@ -91,7 +91,7 @@ INSERT INTO `courses` (`id`, `level_id`, `grade`, `parallel`) VALUES
 CREATE TABLE `levels` (
   `id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `levels`
@@ -122,7 +122,7 @@ CREATE TABLE `students` (
   `guardian_identity_card` varchar(9) DEFAULT NULL,
   `guardian_phone_number` varchar(15) DEFAULT NULL,
   `guardian_relationship` enum('padre','madre','tutor') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `students`
@@ -216,7 +216,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (214, 'JHONATAN', 'ARCE', 'CAMPOS', 'M', '8089006020235059', '15744385', '2018-05-21', NULL, NULL, NULL, NULL, NULL),
 (215, 'ABIGAIL MIA', 'AVILA', 'HUARITO', 'F', '4090000520229417', '16270837', '2018-02-21', NULL, NULL, NULL, NULL, NULL),
 (216, 'CRISTAL MISHEL', 'BUSTAMANTE', 'ROCHA', 'F', '8090004020227732', '16928232', '2017-08-15', 'reina ', 'rocha  vera', '8816951', '77940649', 'madre'),
-(217, 'KEVIN', 'CASILLA', 'UGARTE', 'M', '409000052023751', '15719915', '2017-09-20', NULL, NULL, NULL, NULL, NULL),
+(217, 'KEVIN', 'CASILLA', 'UGARTE', 'M', '409000052023751', '15719915', '2017-09-20', 'MARIA', 'UGARTE GUTIERREZ', '', '68595191', 'madre'),
 (218, 'AARON', 'CHAMBI', 'VICENTE', 'M', '4090000520222432', '16606834', '2018-04-04', NULL, NULL, NULL, NULL, NULL),
 (219, 'NIRA LALE', 'CRUZ', 'CAYARA', 'F', '4090001820234569', '16990408', '2018-02-04', NULL, NULL, NULL, NULL, NULL),
 (220, 'JOSUE ABDIEL', 'EDUARDO', 'MAMANI', 'M', '4090000420229688', '16116437', '2018-03-14', NULL, NULL, NULL, NULL, NULL),
@@ -381,7 +381,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (379, 'ABIGAIL', 'ESTRADA', 'VENEGAS', 'F', '409000052020017', '15182435', '2014-12-03', NULL, NULL, NULL, NULL, NULL),
 (380, 'ALEXANDER', 'FATTY', 'TOCO', 'M', '409000052020006', '14121616', '2014-10-12', NULL, NULL, NULL, NULL, NULL),
 (381, 'JULIAN JOSE', 'GALARZA', 'AGUILAR', 'M', '409000052020023', '16053670', '2014-09-14', NULL, NULL, NULL, NULL, NULL),
-(382, 'LUZ JHENNY', 'LLAMPA', 'BORDA', 'F', '609000052019046', '16935862', '2014-12-08', NULL, NULL, NULL, NULL, NULL),
+(382, 'LUZ JHENNY', 'LLAMPA', 'BORDA', 'F', '609000052019046', '16935862', '2014-12-08', 'senovia ', 'borda herrera', '13416671', '73343766', 'madre'),
 (383, 'LESLY BIANCA', 'MAMANI', 'IQUISE', 'F', '812303102017500A', '15744425', '2012-12-25', NULL, NULL, NULL, NULL, NULL),
 (384, 'JUAN MARCOS', 'MENDOZA', 'MAMANI', 'M', '808900202020057', '15697124', '2014-08-03', NULL, NULL, NULL, NULL, NULL),
 (385, 'LISBETH', 'OLGUIN', 'REJAS', 'F', '409000052020014', '14817692', '2014-11-19', NULL, NULL, NULL, NULL, NULL),
@@ -396,7 +396,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (394, 'JHEYSON', 'VIZALLA', 'PUMA', 'M', '409000052020001', '16833238', '2015-04-21', NULL, NULL, NULL, NULL, NULL),
 (395, 'MONICA CONNIE', '', 'YUJRA', 'F', '409000052021614', '14077795', '2014-09-11', '', '', '', '', 'padre'),
 (396, 'ZURIA CELESTE', '', 'ESCOBAR', 'F', '409000052019025', '16888911', '2014-01-22', '', '', '', '', 'padre'),
-(397, 'CRISTIAN', 'CASILLA', 'UGARTE', 'M', '809802352020108', '15720055', '2015-06-03', NULL, NULL, NULL, NULL, NULL),
+(397, 'CRISTIAN', 'CASILLA', 'UGARTE', 'M', '809802352020108', '15720055', '2015-06-03', 'MARIA', 'UGARTE GUTIERREZ ', '8854967', '68595191', 'madre'),
 (398, 'EGBERTO GROVER', 'CHIPANA', 'MAMANI', 'M', '409000042019055', '16195113', '2014-08-31', NULL, NULL, NULL, NULL, NULL),
 (399, 'ANAHI SELENA', 'GUTIERREZ', 'HERRERA', 'F', '409000052020028', '16833854', '2014-11-22', NULL, NULL, NULL, NULL, NULL),
 (400, 'MICAELA', 'GUTIERREZ', 'MARTINEZ', 'F', '814801592019009', '15429081', '2014-08-05', NULL, NULL, NULL, NULL, NULL),
@@ -455,7 +455,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (453, 'ISAAC JHIMY', 'BURGULLA', 'FLORES', 'M', '809800172018008', '15620181', '2014-04-02', NULL, NULL, NULL, NULL, NULL),
 (454, 'MARY YSABEL', 'CABEZAS', 'HUANCA', 'F', '409000052019005', '16964026', '2014-06-20', NULL, NULL, NULL, NULL, NULL),
 (455, 'LIZETH', 'CALI', 'VELIZ', 'F', '409000052019009', '15193840', '2013-09-24', NULL, NULL, NULL, NULL, NULL),
-(456, 'JOSE LUIS', 'CASILLA', 'UGARTE', 'M', '809802352017113', '15719970', '2013-01-25', NULL, NULL, NULL, NULL, NULL),
+(456, 'JOSE LUIS', 'CASILLA', 'UGARTE', 'M', '809802352017113', '15719970', '2013-01-25', 'MARIA ', 'UGARTE GUTIERREZ', '', '68595191', 'padre'),
 (457, 'ANDREA SOFIA', 'CASTELLON', 'RIVERA', 'F', '6090005720195831', '16892612', '2013-11-10', NULL, NULL, NULL, NULL, NULL),
 (458, 'ROY NELSON', 'CHIPATA', 'CABEZAS', 'M', '409000042019011', '14195509', '2013-10-21', NULL, NULL, NULL, NULL, NULL),
 (459, 'JOSE ARIEL', 'CONDORI', 'ROCHA', 'M', '706400012019081', '17000155', '2013-11-07', NULL, NULL, NULL, NULL, NULL),
@@ -540,9 +540,9 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (538, 'MICHAEL', 'DIAS', 'VARGAS', 'M', '409000052018019', '13478165', '2013-05-06', NULL, NULL, NULL, NULL, NULL),
 (539, 'OSMAR LEANDRO', 'FERRUFINO', 'LEDEZMA', 'M', '409000272017531A', '14603935', '2012-11-14', NULL, NULL, NULL, NULL, NULL),
 (540, 'MAGDIEL NAYELI', 'FUENTES', 'AJATA', 'F', '409000062017026', '16833082', '2013-01-16', NULL, NULL, NULL, NULL, NULL),
-(541, 'JOSE ELIO', 'GARCIA', 'FERNANDEZ', 'M', '509000492017010', '14983126', '2012-03-12', NULL, NULL, NULL, NULL, NULL),
-(542, 'KEVIN RAMIRO', 'GONZALES', 'SORIA', 'M', '409000042017073', '14193374', '2012-07-28', NULL, NULL, NULL, NULL, NULL);
+(541, 'JOSE ELIO', 'GARCIA', 'FERNANDEZ', 'M', '509000492017010', '14983126', '2012-03-12', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mother`, `gender`, `rude_number`, `identity_card`, `birth_date`, `guardian_first_name`, `guardian_last_name`, `guardian_identity_card`, `guardian_phone_number`, `guardian_relationship`) VALUES
+(542, 'KEVIN RAMIRO', 'GONZALES', 'SORIA', 'M', '409000042017073', '14193374', '2012-07-28', NULL, NULL, NULL, NULL, NULL),
 (543, 'GROVER', 'INOCENTE', 'COCA', 'M', '409000052018023', '16235387', '2012-10-22', NULL, NULL, NULL, NULL, NULL),
 (544, 'BELINDA', 'IQUISE', 'MAMANI', 'F', '409000052019013', '17677586', '2011-12-27', NULL, NULL, NULL, NULL, NULL),
 (545, 'LUIS FABIAN', 'LIMACHI', 'TACURI', 'M', '409000052018009', '14266313', '2013-06-30', NULL, NULL, NULL, NULL, NULL),
@@ -575,7 +575,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (572, 'FRANKLIN', 'GUARAYO', 'HUMEREZ', 'M', '409000052017017', '17031913', '2011-12-06', NULL, NULL, NULL, NULL, NULL),
 (573, 'JHOELMA ESMERALDA', 'JANCO', 'AYALA', 'F', '812302032018002', '15382750', '2011-09-02', NULL, NULL, NULL, NULL, NULL),
 (574, 'PAOLA', 'LAZO', 'SUXO', 'F', '407302632015962', '15917658', '2009-12-30', NULL, NULL, NULL, NULL, NULL),
-(575, 'ANAHI PRIMITIVA', 'LLAMPA', 'BORDA', 'F', '609000052017037', '15490806', '2012-05-21', NULL, NULL, NULL, NULL, NULL),
+(575, 'ANAHI PRIMITIVA', 'LLAMPA', 'BORDA', 'F', '609000052017037', '15490806', '2012-05-21', 'senovia', 'borda herrera', '13416671', '73343766', 'padre'),
 (576, 'MARY FLOR', 'MAMANI', 'GRAGEDA', 'F', '409000052017054', '15076942', '2012-06-20', NULL, NULL, NULL, NULL, NULL),
 (577, 'KEVIN', 'MAMANI', 'IQUISE', 'M', '8123028920152129', '15744470', '2010-12-25', NULL, NULL, NULL, NULL, NULL),
 (578, 'AIDE', 'MENECES', 'SALVATIERRA', 'F', '409000052017007', '13417900', '2011-07-18', NULL, NULL, NULL, NULL, NULL),
@@ -682,7 +682,7 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (679, 'MARLENI', 'CALI', 'ESPINOZA', 'F', '4090000520152715', '14834547', '2010-06-06', NULL, NULL, NULL, NULL, NULL),
 (680, 'ALEX', 'CARI CARI', 'MORCO', 'M', '80890067201462', '13227914', '2009-11-16', NULL, NULL, NULL, NULL, NULL),
 (681, 'NATALY', 'CARRILLO', 'ESPINOZA', 'F', '4090000520152624', '15077348', '2010-06-29', NULL, NULL, NULL, NULL, NULL),
-(682, 'ALEYDA', 'CASILLA', 'UGARTE', 'F', '809802352015693', '9513156', '2010-05-30', NULL, NULL, NULL, NULL, NULL),
+(682, 'ALEYDA', 'CASILLA', 'UGARTE', 'F', '809802352015693', '9513156', '2010-05-30', 'maria ', 'ugarte gutierrez', '8854967', '68595191', 'padre'),
 (683, 'NEISA', 'CHOQUE', 'CAYARA', 'F', '8198122120157357', '16990439', '2009-10-06', NULL, NULL, NULL, NULL, NULL),
 (684, 'JOEL', 'CHOQUE', 'AGUAYO', 'M', '4090000520152749', '15079486', '2010-02-04', NULL, NULL, NULL, NULL, NULL),
 (685, 'YANINA CAMILA', 'CHOQUE', 'CESPEDES', 'F', '6090000520142240', '15476072', '2010-04-28', NULL, NULL, NULL, NULL, NULL),
@@ -828,22 +828,36 @@ INSERT INTO `students` (`id`, `first_name`, `last_name_father`, `last_name_mothe
 (825, 'ALEX', 'ROJAS', 'ARUQUIPA', 'M', '4090000520136348', '14235114', '2008-01-02', NULL, NULL, NULL, NULL, NULL),
 (826, 'THIAGO ROBINHO', 'TERRAZAS', 'RIVERA', 'M', '809801202012311', '14581851', '2008-02-15', NULL, NULL, NULL, NULL, NULL),
 (827, 'CARLA', 'VIZALLA', 'PUMA', 'F', '4090000520136587', '12490435', '2007-09-09', NULL, NULL, NULL, NULL, NULL),
-(828, 'EVELYN ', 'ZEBALLOS ', 'TUDELA', 'F', '00000000000000000000', '16475359', '2020-08-05', 'VICTOR ', 'ZEBALLOS ', '7860975', '68534407', 'padre'),
 (829, 'JHON ALVEIRO', 'CABALLERO', 'AGUILAR', 'M', '4090000720511206', '13825108', '2009-08-20', 'ROSAURA SALOME ', 'AGUILAR VILLARROEL', '5303947', '62993205', 'madre'),
-(830, 'PABLO EFRAIN otro curso???', 'CABALLERO', 'AGUILAR', 'M', '8098005220215166', '15814296', '2017-03-13', 'ROSAURA SALOME ', 'AGUILAR VILLARROEL', '5303947', '62993205', 'madre'),
-(831, 'MATHIAS ', 'CHOQUE ', 'MARTINEZ', 'M', '00000000000000000', '16433345', '2020-04-14', 'JUSTO PASTOR ', 'CHOQUE', '3730296', '73787535', 'padre'),
+(830, 'KAELY SHARIANNE', 'LOZA', 'PEREZ', 'F', '16440245', '16440245', '2020-05-03', 'OLIVIA ', 'PEREZ FERNANDEZ', '13534552', '75928386', 'madre'),
+(831, 'MATHIAS ', 'CHOQUE ', 'MARTINEZ', 'M', '16433345', '16433345', '2020-04-14', 'JUSTO PASTOR ', 'CHOQUE BALZAZAR', '3730296', '73787535', 'padre'),
 (832, 'CRISTIAN ', 'CHOQUE', 'MARTINEZ', 'M', '809805152020020', '16248013', '2015-09-02', 'JUSTO PASTOR ', 'CHOQUE', '3730296', '73787535', 'padre'),
-(833, 'ALESSANDRO LEON', 'BUSTAMANTE ', 'ROCHA', 'M', '00000000000000000000', '16604527', '2020-12-21', 'REINA ', 'ROCHA  VERA', '8816951', '77940649', 'madre'),
-(834, 'JOSUE BENJAMIN ', 'YUCRA', 'MOYA', 'M', '80900113202288A', '15553358', '2018-03-02', 'ROSA MARIBEL ', 'MOYA ESPINOZA', '8676888', '76980916', 'madre'),
-(835, 'MATIAS JHOAN ', 'FLORES ', 'MAMANI', 'M', '00000000000000000000', '16841750', '2021-04-09', 'RUDY RONALD ', 'FLORES JIMINEZ', '8855767', '77455058', 'padre'),
+(834, 'BRAYAN ', 'CASILLA', 'UGARTE', 'M', '3739743', '3739743', '2019-08-22', 'MARINA', 'UGARTE GUTIERREZ', '8854967', '68595191', 'madre'),
 (836, 'LUIS MARIO', 'CHAMACA ', 'CRUZ', 'M', '6090005920145772', '14263002', '0000-00-00', 'REYNALDA ', 'CRUZ', '10508994', '63482243', 'madre'),
 (837, 'ERLINDA', 'CHAMACA ', 'CRUZ', 'F', '609000592016015', '16181082', '2011-03-09', 'REYNALDA ', 'CRUZ', '10508994', '63482243', 'madre'),
-(838, 'ANGELES VALERIA ', 'LOZA ', 'LAUREANO', 'F', '000000000000000000', '16464959', '2020-07-06', 'JHOVANA ', 'LAUREANO CONDORI', '8549246', '78363776', 'madre'),
 (839, 'JHUDITH LIA', 'ROJAS', 'ESPINOZA ', 'F', '606800202014354', '13960423', '2009-07-15', 'EDGAR ', 'MAMANI', '8261318', '71231881', 'tutor'),
 (840, 'ISAYANA', 'ROJAS ', 'ESPINOZA', 'F', '706800562017013', '13960929', '2013-05-12', 'EDGAR ', 'MAMANI', '8262318', '71231881', 'tutor'),
 (841, 'KAELY JHARIANNE ', 'LOZA', 'PEREZ', 'F', '00000000000000000000', '16440245', '2020-05-03', 'OLIVIA', 'PEREZ FERNANDEZ', '13534552', '75928386', 'madre'),
 (842, 'JUAN DANIEL', 'SOLIS ', 'CARRILLO', 'M', '8098001720241130', '16502629', '2020-04-14', 'MARIELA ', 'CARRILLO', '9320897', '79774649', 'madre'),
-(843, 'MARIA BELEN ', 'VASQUEZ ', 'CARRILLO', 'F', '409000052016034', '14514747', '2010-08-12', 'MARIELA ', 'CARRILLO', '9320897', '79774649', 'madre');
+(843, 'MARIA BELEN ', 'VASQUEZ ', 'CARRILLO', 'F', '409000052016034', '14514747', '2010-08-12', 'MARIELA ', 'CARRILLO', '9320897', '79774649', 'madre'),
+(844, 'EVELYN ', 'ZEBALLOS ', 'TUDELA', 'F', '16475359', '16475359', '2020-08-05', 'VICTOR ', 'ZEBALLOS REINAGA', '7860975', '73765589', 'padre'),
+(845, 'ALESSANDRA LEON', 'BUSTAMANTE', 'ROCHA', 'M', '16604527', '16604527', '2020-12-21', 'REINAGA', 'CASTELLANO', '8039190', '77940649', 'madre'),
+(846, 'MATIAS', 'FLORES', 'MAMANI', 'M', '16841750', '16841750', '2021-04-09', 'RUDY RONALD', 'FLORES JIMENEZ', '8855767', '77455058', 'padre'),
+(847, 'ANGELES VALERIA ', 'LOZA', 'LAUREANO', 'F', '16464959', '16464959', '2020-07-06', 'JHOVANA ', 'LAUREANO CONDORI', '8549246', '78363776', 'madre'),
+(848, 'FERMIN ', 'COLQUE', 'BORDA', 'M', '16556913', '16556913', '2020-11-19', 'SENOVIA ', 'BORDA HERRERA', '13416671', '73343766', 'madre'),
+(849, 'ZOE ARLETH', 'CHOQUE ', 'ROMERO', 'F', '16471193', '16471193', '2020-07-25', 'YASMANI ', 'CHOQUE CHIRI', '7874817', '73405616', 'padre'),
+(850, 'JAIR AARON ', 'FERNANDEZ ', 'FRANCO', 'M', '16586802', '16586802', '2020-12-07', 'FLORINDA', 'FRANCO CASTRI', '6519797', '78345818', 'madre'),
+(851, 'AYSE CHARLOTTE', 'LEDEZMA', 'SALAZAR', 'F', '17647362', '17647362', '2021-02-16', 'MARIELA ', 'SALAZAR MEDRANO', '8847605', '62999664', 'madre'),
+(852, 'ANDRES JHUNIOR ', 'MENECES ', 'QUISPE ', 'M', '16539901', '16539901', '2020-11-06', 'YESSICA ', 'QUISPE VILLCA', '9344347', '76445559', 'madre'),
+(853, 'TAYLOR JAMES ', 'MENESES', 'VILLARROEL', 'M', '16922846', '16922846', '2021-05-14', 'NEMESIO LINO', 'MENESES ANGULO', '9326515', '75468756', 'padre'),
+(854, 'XIOMARA ', 'REINAGA ', 'VALDA', 'F', '16685547', '16685547', '2021-02-10', 'DARLIN ', 'VALDA GARNICA', '9307816', '65705227', 'madre'),
+(855, 'GABRIEL JESUS', 'REINAGA', 'REVOLLO', 'M', '16832463', '16832463', '2024-05-20', 'TRIJONIA', 'REVOLLO MONTECINOS', '5216177', '67682905', 'madre'),
+(856, 'EVELYN ', 'FLORES ', 'LEON', 'F', '16519021', '16519021', '2020-02-27', 'DANIELA ', 'LEON ESCOBAR', '9411350', '75984218', 'madre'),
+(857, 'JUAN ANDERSON ', 'COLQUE ', 'FLORES', 'M', '16204648', '16204648', '2019-10-16', 'MARINA ', 'FLORES VELIZ', '8760521', '69532579', 'madre'),
+(858, 'ALDAIR VICENTE ', 'ALMANZA ', 'FLORES', 'M', '16343905', '16343905', '2020-01-22', 'LIZBET ', 'FLORES VELIZ', '8760581', '63904351', 'madre'),
+(859, 'VICTORIA', 'SALAZAR', 'LAZARO', 'F', '16017772', '16017772', '2016-09-02', 'ALEJANDRINA', 'LAZARO QUISPIA', '5756841', '72305335', 'madre'),
+(860, 'PABLO EFRAIN', 'CABALLERO', 'AGUILAR', 'M', '8098005220215166', '15814296', '2017-03-13', 'ROSAURA SALOME', 'AGUILAR VILLARROEL', '5303947', '11111111', 'madre'),
+(861, 'RUTH KEYLA', 'GALLEGO', 'MAMANI', 'F', '8098012420211879', '15602840', '2016-10-27', 'VICENTE MILTON', 'TITO IGNACIO', '4535501', '72727886', 'tutor');
 
 -- --------------------------------------------------------
 
@@ -855,7 +869,7 @@ CREATE TABLE `student_courses` (
   `student_id` bigint(20) NOT NULL,
   `course_id` bigint(20) NOT NULL,
   `status` enum('Efectivo - I','No Inscrito','Efectivo - T','Traslado','Retirado') DEFAULT 'No Inscrito'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `student_courses`
@@ -949,7 +963,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (214, 10, 'No Inscrito'),
 (215, 10, 'No Inscrito'),
 (216, 10, 'Efectivo - I'),
-(217, 10, 'No Inscrito'),
+(217, 10, 'Efectivo - I'),
 (218, 10, 'No Inscrito'),
 (219, 10, 'No Inscrito'),
 (220, 10, 'No Inscrito'),
@@ -1114,7 +1128,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (379, 19, 'No Inscrito'),
 (380, 19, 'No Inscrito'),
 (381, 19, 'No Inscrito'),
-(382, 19, 'No Inscrito'),
+(382, 19, 'Efectivo - I'),
 (383, 19, 'No Inscrito'),
 (384, 19, 'No Inscrito'),
 (385, 19, 'No Inscrito'),
@@ -1129,7 +1143,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (394, 19, 'No Inscrito'),
 (395, 20, 'No Inscrito'),
 (396, 20, 'No Inscrito'),
-(397, 20, 'No Inscrito'),
+(397, 20, 'Efectivo - I'),
 (398, 20, 'No Inscrito'),
 (399, 20, 'No Inscrito'),
 (400, 20, 'No Inscrito'),
@@ -1188,7 +1202,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (453, 23, 'No Inscrito'),
 (454, 23, 'No Inscrito'),
 (455, 23, 'No Inscrito'),
-(456, 23, 'No Inscrito'),
+(456, 23, 'Efectivo - I'),
 (457, 23, 'No Inscrito'),
 (458, 23, 'No Inscrito'),
 (459, 23, 'No Inscrito'),
@@ -1307,7 +1321,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (572, 28, 'No Inscrito'),
 (573, 28, 'No Inscrito'),
 (574, 28, 'No Inscrito'),
-(575, 28, 'No Inscrito'),
+(575, 28, 'Efectivo - I'),
 (576, 28, 'No Inscrito'),
 (577, 28, 'No Inscrito'),
 (578, 28, 'No Inscrito'),
@@ -1415,7 +1429,7 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (679, 34, 'No Inscrito'),
 (680, 34, 'No Inscrito'),
 (681, 34, 'No Inscrito'),
-(682, 34, 'No Inscrito'),
+(682, 34, 'Efectivo - I'),
 (683, 34, 'No Inscrito'),
 (684, 34, 'No Inscrito'),
 (685, 34, 'No Inscrito'),
@@ -1561,22 +1575,36 @@ INSERT INTO `student_courses` (`student_id`, `course_id`, `status`) VALUES
 (825, 41, 'No Inscrito'),
 (826, 41, 'No Inscrito'),
 (827, 41, 'No Inscrito'),
-(828, 1, 'Efectivo - I'),
 (829, 17, 'No Inscrito'),
-(830, 5, 'No Inscrito'),
+(830, 5, 'Efectivo - I'),
 (831, 5, 'Efectivo - I'),
 (832, 17, 'Efectivo - I'),
-(833, 1, 'Efectivo - I'),
 (834, 5, 'Efectivo - I'),
-(835, 1, 'Efectivo - I'),
 (836, 19, 'No Inscrito'),
 (837, 14, 'No Inscrito'),
-(838, 1, 'Efectivo - I'),
 (839, 16, 'No Inscrito'),
 (840, 2, 'No Inscrito'),
 (841, 5, 'Efectivo - I'),
 (842, 5, 'Efectivo - I'),
-(843, 4, 'No Inscrito');
+(843, 4, 'No Inscrito'),
+(844, 1, 'Efectivo - I'),
+(845, 1, 'Efectivo - I'),
+(846, 1, 'Efectivo - I'),
+(847, 1, 'Efectivo - I'),
+(848, 1, 'Efectivo - I'),
+(849, 1, 'Efectivo - I'),
+(850, 1, 'Efectivo - I'),
+(851, 1, 'Efectivo - I'),
+(852, 1, 'Efectivo - I'),
+(853, 1, 'Efectivo - I'),
+(854, 1, 'Efectivo - I'),
+(855, 1, 'Efectivo - I'),
+(856, 5, 'Efectivo - I'),
+(857, 5, 'Efectivo - I'),
+(858, 5, 'Efectivo - I'),
+(859, 13, 'Efectivo - I'),
+(860, 14, 'Efectivo - I'),
+(861, 14, 'No Inscrito');
 
 --
 -- Índices para tablas volcadas
@@ -1628,7 +1656,7 @@ ALTER TABLE `levels`
 -- AUTO_INCREMENT de la tabla `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=844;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=865;
 
 --
 -- Restricciones para tablas volcadas
