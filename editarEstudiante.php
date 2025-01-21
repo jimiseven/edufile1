@@ -36,6 +36,7 @@ $student = $result->fetch_assoc();
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         input[type="text"],
         select {
@@ -87,7 +88,7 @@ $student = $result->fetch_assoc();
         <div class="sidebar p-3" style="background-color: #000; color: #fff; min-width: 250px;">
             <h3 class="text-center">EduFile</h3>
             <nav class="nav flex-column">
-                <a href="#" class="nav-link text-white">
+                <a href="index.php" class="nav-link text-white">
                     <i class="bi bi-house-door"></i> Inicio
                 </a>
                 <div>
@@ -103,11 +104,6 @@ $student = $result->fetch_assoc();
                 <div>
                     <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
-                    </a>
-                </div>
-                <div>
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-person"></i> Profesores
                     </a>
                 </div>
             </nav>

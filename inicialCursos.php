@@ -46,6 +46,11 @@
             color: #ffffff;
         }
 
+        .nav-link.active {
+            background-color: #2874A6;
+            color: #ffffff !important;
+        }
+
         @media (max-width: 768px) {
             .course-column {
                 flex: 1 1 100%;
@@ -74,13 +79,8 @@
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link text-white" href="#">
+                    <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
-                    </a>
-                </div>
-                <div>
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-person"></i> Profesores
                     </a>
                 </div>
             </nav>

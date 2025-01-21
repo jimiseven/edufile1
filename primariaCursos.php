@@ -60,7 +60,7 @@
         <div class="sidebar p-3" style="background-color: #000; color: #fff; min-width: 250px;">
             <h3 class="text-center">EduFile</h3>
             <nav class="nav flex-column">
-                <a href="#" class="nav-link text-white">
+                <a href="index.php" class="nav-link text-white">
                     <i class="bi bi-house-door"></i> Inicio
                 </a>
                 <div>
@@ -74,13 +74,8 @@
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link text-white" href="#">
+                    <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
-                    </a>
-                </div>
-                <div>
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-person"></i> Profesores
                     </a>
                 </div>
             </nav>

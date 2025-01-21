@@ -40,6 +40,8 @@
             padding: 20px;
             border-radius: 10px;
             color: #ffffff;
+            max-width: 600px;
+            margin: 20px auto;
         }
 
         .chart-title {
@@ -62,7 +64,7 @@
         <div class="sidebar p-3" style="background-color: #000; color: #fff; min-width: 250px;">
             <h3 class="text-center">EduFile</h3>
             <nav class="nav flex-column">
-                <a href="#" class="nav-link text-white">
+                <a href="index.php" class="nav-link text-white">
                     <i class="bi bi-house-door"></i> Inicio
                 </a>
                 <div>
@@ -76,13 +78,8 @@
                     </div>
                 </div>
                 <div>
-                    <a class="nav-link text-white" href="#">
+                    <a class="nav-link text-white" href="estudiantes.php">
                         <i class="bi bi-people"></i> Estudiantes
-                    </a>
-                </div>
-                <div>
-                    <a class="nav-link text-white" href="#">
-                        <i class="bi bi-person"></i> Profesores
                     </a>
                 </div>
             </nav>
@@ -118,21 +115,8 @@
 
                 ?>
 
-                <div class="col-md-6 col-lg-3">
-                    <div class="stat-card">
-                        <h3>Total Efectivos</h3>
-                        <p><?php echo $globalData['efectivos']; ?></p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="stat-card">
-                        <h3>Total No Inscritos</h3>
-                        <p><?php echo $globalData['no_inscritos']; ?></p>
-                    </div>
-                </div>
-
                 <?php while ($level = $resultByLevel->fetch_assoc()) { ?>
-                    <div class="col-md-6 col-lg-3">
+                    <div class="col-md-4">
                         <div class="stat-card">
                             <h3><?php echo htmlspecialchars($level['level_name']); ?></h3>
                             <p>Efectivos: <?php echo $level['efectivos']; ?></p>
@@ -142,10 +126,27 @@
                 <?php } ?>
             </div>
 
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <h3>Total Efectivos</h3>
+                        <p><?php echo $globalData['efectivos']; ?></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <h3>Total No Inscritos</h3>
+                        <p><?php echo $globalData['no_inscritos']; ?></p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Chart Section -->
-            <div class="chart-container">
-                <h3 class="chart-title">Estudiantes por Nivel</h3>
-                <canvas id="chartNivel"></canvas>
+            <div class="col-md-12">
+                <div class="chart-container">
+                    <h3 class="chart-title">Estudiantes por Nivel</h3>
+                    <canvas id="chartNivel"></canvas>
+                </div>
             </div>
 
             <?php
