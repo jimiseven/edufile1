@@ -50,6 +50,16 @@
         .btn-clear:hover {
             background-color: #c82333;
         }
+
+        .btn-new-student {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-new-student:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -94,6 +104,7 @@
                     <input type="text" id="searchStudent" class="form-control" placeholder="Buscar estudiante...">
                     <button class="btn btn-clear" id="clearSearch">&times;</button>
                 </div>
+                <a href="nuevoRegistroEstudiante.php" class="btn btn-new-student">Nuevo Estudiante</a>
             </div>
 
             <table class="table table-bordered" id="studentsTable">
@@ -158,7 +169,7 @@
             const table = document.getElementById('studentsTable');
             const rows = table.getElementsByTagName('tr');
 
-            searchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function() {
                 const searchValue = this.value.toLowerCase();
 
                 for (let i = 1; i < rows.length; i++) {
@@ -177,7 +188,7 @@
                 }
             });
 
-            clearButton.addEventListener('click', function () {
+            clearButton.addEventListener('click', function() {
                 searchInput.value = '';
                 for (let i = 1; i < rows.length; i++) {
                     rows[i].style.display = '';
@@ -185,6 +196,49 @@
             });
         });
     </script>
+
+    <!-- Pop-up de confirmación -->
+    <div id="alertPopup" class="alert-popup">Estudiante eliminado correctamente.</div>
+
+    <script>
+        // Mostrar el pop-up si se pasa el estado 'deleted' en la URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('status') && urlParams.get('status') === 'deleted') {
+                const alertPopup = document.getElementById('alertPopup');
+                alertPopup.classList.add('show');
+
+                // Ocultar el pop-up después de 1 segundo
+                setTimeout(() => {
+                    alertPopup.classList.remove('show');
+                }, 1500);
+            }
+        });
+    </script>
+
+    <style>
+        .alert-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            padding: 15px 20px;
+            background-color: #dc3545;
+            /* Rojo de Bootstrap */
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .alert-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+
 </body>
 
 </html>

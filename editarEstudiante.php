@@ -52,6 +52,32 @@ $student = $result->fetch_assoc();
         .form-section h4 {
             color: #ffffff;
         }
+
+        .btn-delete {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .modal-header {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modal-footer .btn {
+            color: white;
+        }
+
+        .modal-footer .btn-danger:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 
@@ -90,6 +116,8 @@ $student = $result->fetch_assoc();
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-3" style="max-width: 1200px; margin: auto;">
             <h2 class="mb-3">Editar Estudiante</h2>
+            <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar Estudiante</button>
+
             <form action="actualizarEstudiante.php" method="POST">
                 <input type="hidden" name="original_rude" value="<?php echo htmlspecialchars($student['rude_number']); ?>">
                 <input type="hidden" name="grade" value="<?php echo htmlspecialchars($grade); ?>">
@@ -173,6 +201,25 @@ $student = $result->fetch_assoc();
                     <a href="volanteEstudiante.php?student_id=<?php echo $student_id; ?>&grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" target="_blank" class="btn btn-secondary">Vista Volante</a>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+                </div>
+                <div class="modal-body" style="color:rgb(0, 0, 0);">
+                    <p>¿Está seguro de que desea eliminar al estudiante <strong><?php echo htmlspecialchars($student['first_name']); ?></strong>? Esta acción no se puede deshacer.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <a href="eliminarEstudiante.php?student_id=<?php echo $student_id; ?>" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
         </div>
     </div>
 
