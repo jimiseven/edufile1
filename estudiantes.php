@@ -211,6 +211,23 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('status') && urlParams.get('status') === 'updated') {
+                const alertPopup = document.createElement('div');
+                alertPopup.className = 'alert-popup show';
+                alertPopup.textContent = 'Datos del estudiante actualizados correctamente';
+                document.body.appendChild(alertPopup);
+
+                setTimeout(() => {
+                    alertPopup.remove();
+                }, 1500);
+            }
+        });
+    </script>
+
+
     <style>
         .alert-popup {
             position: fixed;

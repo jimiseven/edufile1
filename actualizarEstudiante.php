@@ -3,26 +3,24 @@
 include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recibir datos del formulario
-    $original_rude = $_POST['original_rude'];
-    $rude_number = $_POST['rude_number'];
-    $first_name = $_POST['first_name'];
-    $last_name_father = $_POST['last_name_father'] ?? null;
-    $last_name_mother = $_POST['last_name_mother'] ?? null;
-    $identity_card = $_POST['identity_card'] ?? null;
-    $gender = $_POST['gender'];
+    // Recibir datos del formulario y convertir a mayúsculas
+    $original_rude = strtoupper($_POST['original_rude']);
+    $rude_number = strtoupper($_POST['rude_number']);
+    $first_name = strtoupper($_POST['first_name']);
+    $last_name_father = isset($_POST['last_name_father']) ? strtoupper($_POST['last_name_father']) : null;
+    $last_name_mother = isset($_POST['last_name_mother']) ? strtoupper($_POST['last_name_mother']) : null;
+    $identity_card = isset($_POST['identity_card']) ? strtoupper($_POST['identity_card']) : null;
+    $gender = strtoupper($_POST['gender']);
     $birth_date = $_POST['birth_date'] ?? null;
-    $grade = $_POST['grade'] ?? null;
-    $parallel = $_POST['parallel'] ?? null;
 
-    // Datos del responsable
-    $guardian_first_name = $_POST['guardian_first_name'] ?? null;
-    $guardian_last_name = $_POST['guardian_last_name'] ?? null;
-    $guardian_identity_card = $_POST['guardian_identity_card'] ?? null;
-    $guardian_phone_number = $_POST['guardian_phone_number'] ?? null;
-    $guardian_relationship = $_POST['guardian_relationship'] ?? null;
+    // Datos del responsable en mayúsculas
+    $guardian_first_name = isset($_POST['guardian_first_name']) ? strtoupper($_POST['guardian_first_name']) : null;
+    $guardian_last_name = isset($_POST['guardian_last_name']) ? strtoupper($_POST['guardian_last_name']) : null;
+    $guardian_identity_card = isset($_POST['guardian_identity_card']) ? strtoupper($_POST['guardian_identity_card']) : null;
+    $guardian_phone_number = isset($_POST['guardian_phone_number']) ? strtoupper($_POST['guardian_phone_number']) : null;
+    $guardian_relationship = isset($_POST['guardian_relationship']) ? strtoupper($_POST['guardian_relationship']) : null;
 
-    // Verificar si el RUDE ya existe
+    // Verificar si el RUDE ya existe en otro estudiante
     $queryCheck = "SELECT * FROM students WHERE rude_number = ? AND rude_number != ?";
     $stmtCheck = $conn->prepare($queryCheck);
     $stmtCheck->bind_param("ss", $rude_number, $original_rude);
@@ -73,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $stmt->execute();
 
-        // Redirigir con mensaje de éxito al curso correspondiente
-        header("Location: vistaGenCurso.php?grade=$grade&parallel=$parallel&success=1");
+        // Redirigir a estudiantes.php con un parámetro de éxito
+        header("Location: estudiantes.php?status=updated");
         exit;
     } catch (Exception $e) {
         // Redirigir con mensaje de error
