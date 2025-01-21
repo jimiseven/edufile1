@@ -146,7 +146,6 @@
                 </div>
                 <div>
                     <a href="vistaPDF.php?grade=<?php echo urlencode($grade); ?>&parallel=<?php echo urlencode($parallel); ?>&level=<?php echo urlencode($level); ?>" class="btn btn-secondary" target="_blank">Vista PDF</a>
-                    <a href="nuevoEstudiante.php?grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" class="btn btn-success">Nuevo Estudiante</a>
                 </div>
             </div>
 
