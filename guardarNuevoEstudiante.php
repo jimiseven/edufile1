@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $course_id = $row_course['id'];
 
             // Insertar en la tabla intermedia student_courses
-            $query_student_course = "INSERT INTO student_courses (student_id, course_id, status) VALUES (?, ?, 'No Inscrito')";
+            $query_student_course = "INSERT INTO student_courses (student_id, course_id, status) VALUES (?, ?, 'Efectivo - I')";
             $stmt_student_course = $conn->prepare($query_student_course);
             $stmt_student_course->bind_param("ii", $student_id, $course_id);
 
