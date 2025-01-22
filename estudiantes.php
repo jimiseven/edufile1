@@ -99,8 +99,12 @@
                     <input type="text" id="searchStudent" class="form-control" placeholder="Buscar estudiante...">
                     <button class="btn btn-clear" id="clearSearch">&times;</button>
                 </div>
-                <a href="nuevoRegistroEstudiante.php" class="btn btn-new-student">Nuevo Estudiante</a>
+                <div class="d-flex flex-column">
+                    <a href="cambioCurso.php" class="btn btn-danger mb-2">Cambio Curso</a>
+                    <a href="nuevoRegistroEstudiante.php" class="btn btn-new-student">Nuevo Estudiante</a>
+                </div>
             </div>
+
 
             <table class="table table-bordered" id="studentsTable">
                 <thead>
