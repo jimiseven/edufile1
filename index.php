@@ -65,7 +65,7 @@
             <h3 class="text-center">EduFile</h3>
             <nav class="nav flex-column">
                 <a href="index.php" class="nav-link text-white">
-                    <i class="bi bi-house-door"></i> Inicio
+                    <i class="bi bi-house-door"></i> Inicio desde gino
                 </a>
                 <div>
                     <a class="nav-link text-white" data-bs-toggle="collapse" href="#nivelMenu" role="button" aria-expanded="false" aria-controls="nivelMenu">
