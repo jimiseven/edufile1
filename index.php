@@ -12,105 +12,105 @@
         rel="stylesheet">
     <!-- Custom Styles -->
     <style>
-    body {
-        background-color: #1E2A38;
-        /* Color de fondo original */
-        color: #ffffff;
-    }
+        body {
+            background-color: #1E2A38;
+            /* Color de fondo original */
+            color: #ffffff;
+        }
 
-    .sidebar {
-        background-color: #000;
-        /* Manteniendo el color del sidebar */
-        color: #fff;
-        min-width: 250px;
-        min-height: 100vh;
-    }
+        .sidebar {
+            background-color: #000;
+            /* Manteniendo el color del sidebar */
+            color: #fff;
+            min-width: 250px;
+            min-height: 100vh;
+        }
 
-    .sidebar .nav-link,
-    .sidebar .nav-link:hover {
-        color: #fff;
-    }
+        .sidebar .nav-link,
+        .sidebar .nav-link:hover {
+            color: #fff;
+        }
 
-    .main-content {
-        flex-grow: 1;
-        padding: 20px;
-    }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
 
-    .card-stat {
-        background-color: #1F618D;
-        /* Color de las tarjetas original */
-        color: #ffffff;
-        border: none;
-        border-radius: 15px;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .card-stat:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-header {
-        background-color: transparent;
-        border-bottom: 1px solid #ffffff;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-
-    .card-body {
-        padding: 20px;
-    }
-
-    .chart-container {
-        background-color: #2C3E50;
-        /* Color original del gráfico */
-        padding: 20px;
-        border-radius: 15px;
-        margin-top: 30px;
-        max-width: 600px;
-        /* Limitar el ancho máximo del gráfico */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .chart-title {
-        text-align: center;
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        font-weight: bold;
-        color: #ffffff;
-    }
-
-    #chartNivel {
-        width: 100%;
-        max-height: 300px;
-        /* Ajustar la altura máxima del gráfico */
-    }
-
-    .nav-link.active {
-        background-color: #1F618D;
-    }
-
-    h2 {
-        color: #ffffff;
-    }
-
-    /* Mejoras en la responsividad */
-    @media (max-width: 768px) {
         .card-stat {
-            margin-bottom: 20px;
+            background-color: #1F618D;
+            /* Color de las tarjetas original */
+            color: #ffffff;
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid #ffffff;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
         }
 
         .chart-container {
-            padding: 15px;
-            max-width: 100%;
+            background-color: #2C3E50;
+            /* Color original del gráfico */
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            max-width: 600px;
+            /* Limitar el ancho máximo del gráfico */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffffff;
         }
 
         #chartNivel {
-            max-height: 200px;
+            width: 100%;
+            max-height: 300px;
+            /* Ajustar la altura máxima del gráfico */
         }
-    }
+
+        .nav-link.active {
+            background-color: #1F618D;
+        }
+
+        h2 {
+            color: #ffffff;
+        }
+
+        /* Mejoras en la responsividad */
+        @media (max-width: 768px) {
+            .card-stat {
+                margin-bottom: 20px;
+            }
+
+            .chart-container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            #chartNivel {
+                max-height: 200px;
+            }
+        }
     </style>
 </head>
 
@@ -137,6 +137,13 @@
                 <a class="nav-link" href="estudiantes.php">
                     <i class="bi bi-people"></i> Estudiantes
                 </a>
+                <div class="mt-3">
+                    <a class="nav-link text-white" href="imprimirListas.php" target="_blank">
+                        <i class="bi bi-printer"></i> Imprimir Listas - Respaldo
+                    </a>
+                </div>
+
+
             </nav>
         </div>
 
@@ -176,29 +183,30 @@
                 ?>
 
                 <?php while ($level = $resultByLevel->fetch_assoc()) { ?>
-                <div class="col-lg-4 col-md-6">
-                    <div class="card card-stat">
-                        <div class="card-header">
-                            <?php echo htmlspecialchars($level['level_name']); ?>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6 border-end">
-                                    <h5><i class="bi bi-gender-ambiguous"></i> Género</h5>
-                                    <p><i class="bi bi-gender-male"></i> Hombres: <?php echo $level['hombres']; ?></p>
-                                    <p><i class="bi bi-gender-female"></i> Mujeres: <?php echo $level['mujeres']; ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <h5><i class="bi bi-list-check"></i> Estado</h5>
-                                    <p><i class="bi bi-check-circle"></i> Efectivos: <?php echo $level['efectivos']; ?>
-                                    </p>
-                                    <p><i class="bi bi-x-circle"></i> No Inscritos:
-                                        <?php echo $level['no_inscritos']; ?></p>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card card-stat">
+                            <div class="card-header">
+                                <?php echo htmlspecialchars($level['level_name']); ?>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6 border-end">
+                                        <h5><i class="bi bi-gender-ambiguous"></i> Género</h5>
+                                        <p><i class="bi bi-gender-male"></i> Hombres: <?php echo $level['hombres']; ?></p>
+                                        <p><i class="bi bi-gender-female"></i> Mujeres: <?php echo $level['mujeres']; ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <h5><i class="bi bi-list-check"></i> Estado</h5>
+                                        <p><i class="bi bi-check-circle"></i> Efectivos: <?php echo $level['efectivos']; ?>
+                                        </p>
+                                        <p><i class="bi bi-x-circle"></i> No Inscritos:
+                                            <?php echo $level['no_inscritos']; ?>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php } ?>
             </div>
             <!-- Totales Generales -->
@@ -215,14 +223,17 @@
                                     <p><i class="bi bi-gender-male"></i> Hombres: <?php echo $globalData['hombres']; ?>
                                     </p>
                                     <p><i class="bi bi-gender-female"></i> Mujeres:
-                                        <?php echo $globalData['mujeres']; ?></p>
+                                        <?php echo $globalData['mujeres']; ?>
+                                    </p>
                                 </div>
                                 <div class="col-6">
                                     <h5><i class="bi bi-list-check"></i> Estado</h5>
                                     <p><i class="bi bi-check-circle"></i> Efectivos:
-                                        <?php echo $globalData['efectivos']; ?></p>
+                                        <?php echo $globalData['efectivos']; ?>
+                                    </p>
                                     <p><i class="bi bi-x-circle"></i> No Inscritos:
-                                        <?php echo $globalData['no_inscritos']; ?></p>
+                                        <?php echo $globalData['no_inscritos']; ?>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -258,21 +269,21 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const ctx = document.getElementById('chartNivel').getContext('2d');
-        const data = <?php echo json_encode($chartData); ?>;
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('chartNivel').getContext('2d');
+            const data = <?php echo json_encode($chartData); ?>;
 
-        const labels = data.map(item => item.level);
-        const hombres = data.map(item => item.hombres);
-        const mujeres = data.map(item => item.mujeres);
-        const efectivos = data.map(item => item.efectivos);
-        const noInscritos = data.map(item => item.no_inscritos);
+            const labels = data.map(item => item.level);
+            const hombres = data.map(item => item.hombres);
+            const mujeres = data.map(item => item.mujeres);
+            const efectivos = data.map(item => item.efectivos);
+            const noInscritos = data.map(item => item.no_inscritos);
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
                         label: 'Hombres',
                         data: hombres,
                         backgroundColor: '#1ABC9C'
@@ -292,45 +303,45 @@
                         data: noInscritos,
                         backgroundColor: '#E67E22'
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Permitir que el gráfico se adapte al tamaño del contenedor
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#ffffff'
-                        },
-                        grid: {
-                            color: '#7f8c8d'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#ffffff'
-                        },
-                        grid: {
-                            color: '#7f8c8d'
-                        }
-                    }
+                    ]
                 },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#ffffff'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Permitir que el gráfico se adapte al tamaño del contenedor
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: '#7f8c8d'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: '#7f8c8d'
+                            }
                         }
                     },
-                    title: {
-                        display: true,
-                        text: 'Estudiantes por Género y Nivel',
-                        color: '#ffffff'
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Estudiantes por Género y Nivel',
+                            color: '#ffffff'
+                        }
                     }
                 }
-            }
+            });
         });
-    });
     </script>
 </body>
 
