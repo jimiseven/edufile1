@@ -21,6 +21,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $guardian_phone_number = $_POST['guardian_phone_number'] ?? null;
     $guardian_relationship = $_POST['guardian_relationship'] ?? null;
 
+    // Verificar si el CI ya existe
+    if (!empty($identity_card)) {
+        $query = "SELECT COUNT(*) as count FROM students WHERE identity_card = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $identity_card);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+
+        if ($data['count'] > 0) {
+            echo "<script>alert('Error: El CI ya está registrado.'); window.history.back();</script>";
+            exit();
+        }
+    }
+
+    // Verificar si el RUDE ya existe
+    if (!empty($rude_number)) {
+        $query = "SELECT COUNT(*) as count FROM students WHERE rude_number = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $rude_number);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $data = $result->fetch_assoc();
+
+        if ($data['count'] > 0) {
+            echo "<script>alert('Error: El RUDE ya está registrado.'); window.history.back();</script>";
+            exit();
+        }
+    }
+
     // Insertar datos en la tabla de estudiantes
     $query = "INSERT INTO students (first_name, last_name_father, last_name_mother, identity_card, gender, birth_date, rude_number, guardian_first_name, guardian_last_name, guardian_identity_card, guardian_phone_number, guardian_relationship) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

@@ -8,7 +8,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         input[type="text"],
         select {
@@ -49,6 +50,12 @@
         .alert-popup.show {
             opacity: 1;
             visibility: visible;
+        }
+
+        /* Estilo para el modal de errores */
+        .error-text {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -114,7 +121,8 @@
                     <div class="row mb-2">
                         <div class="col-md-3">
                             <label for="identity_card" class="form-label">CI</label>
-                            <input type="text" class="form-control" id="identity_card" name="identity_card" placeholder="Opcional">
+                            <input type="text" class="form-control" id="identity_card" name="identity_card"
+                                placeholder="Opcional">
                         </div>
                         <div class="col-md-3">
                             <label for="gender" class="form-label">Sexo</label>
@@ -130,11 +138,11 @@
                         </div>
                         <div class="col-md-3">
                             <label for="rude_number" class="form-label">RUDE</label>
-                            <input type="text" class="form-control" id="rude_number" name="rude_number" placeholder="Opcional">
+                            <input type="text" class="form-control" id="rude_number" name="rude_number"
+                                placeholder="Opcional">
                         </div>
                     </div>
                 </div>
-
                 <!-- Información del Responsable -->
                 <div class="mb-3 p-3" style="background-color: #2C3E50; border-radius: 10px;">
                     <h4 class="mb-2">Información del Responsable (Opcional)</h4>
@@ -149,13 +157,15 @@
                         </div>
                         <div class="col-md-4">
                             <label for="guardian_identity_card" class="form-label">CI</label>
-                            <input type="text" class="form-control" id="guardian_identity_card" name="guardian_identity_card">
+                            <input type="text" class="form-control" id="guardian_identity_card"
+                                name="guardian_identity_card">
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="guardian_phone_number" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" id="guardian_phone_number" name="guardian_phone_number">
+                            <input type="text" class="form-control" id="guardian_phone_number"
+                                name="guardian_phone_number">
                         </div>
                         <div class="col-md-6">
                             <label for="guardian_relationship" class="form-label">Relación</label>
@@ -180,6 +190,24 @@
 
     <!-- Pop-up de confirmación -->
     <div id="alertPopup" class="alert-popup">Estudiante registrado correctamente.</div>
+
+    <!-- Modal de Duplicados -->
+    <div class="modal fade" id="duplicadoModal" tabindex="-1" aria-labelledby="duplicadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="duplicadoModalLabel" style="color: black;">Error de Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body error-text" id="duplicadoModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -210,29 +238,53 @@
             return true;
         }
 
+        function verificarDuplicados(callback) {
+            const identity_card = document.getElementById('identity_card').value;
+            const rude_number = document.getElementById('rude_number').value;
+
+            fetch('verificarEstudiante.php', {
+                method: 'POST',
+                body: new URLSearchParams(`identity_card=${identity_card}&rude_number=${rude_number}`)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'error') {
+                        const modalBody = document.getElementById('duplicadoModalBody');
+                        modalBody.textContent = data.message;
+                        const modal = new bootstrap.Modal(document.getElementById('duplicadoModal'));
+                        modal.show();
+                    } else if (callback) {
+                        callback();
+                    }
+                });
+        }
+
         function handleSubmit(event) {
             event.preventDefault(); // Prevenir envío estándar del formulario
-            const form = document.getElementById('studentForm');
 
-            // Simular el envío del formulario
-            fetch(form.action, {
+            verificarDuplicados(() => {
+                const form = document.getElementById('studentForm');
+
+                // Simular el envío del formulario
+                fetch(form.action, {
                     method: 'POST',
                     body: new FormData(form)
                 })
-                .then(response => {
-                    if (response.ok) {
-                        const alertPopup = document.getElementById('alertPopup');
-                        alertPopup.classList.add('show');
+                    .then(response => {
+                        if (response.ok) {
+                            const alertPopup = document.getElementById('alertPopup');
+                            alertPopup.classList.add('show');
 
-                        // Redirigir después de 0.8 segundos
-                        setTimeout(() => {
-                            window.location.href = 'estudiantes.php';
-                        }, 800);
-                    } else {
-                        alert('Ocurrió un error al registrar el estudiante.');
-                    }
-                })
-                .catch(() => alert('Ocurrió un error al registrar el estudiante.'));
+                            // Redirigir después de 0.8 segundos
+                            setTimeout(() => {
+                                window.location.href = 'estudiantes.php';
+                            }, 800);
+                        } else {
+                            alert('Ocurrió un error al registrar el estudiante.');
+                        }
+                    })
+                    .catch(() => alert('Ocurrió un error al registrar el estudiante.'));
+            });
         }
     </script>
 </body>
