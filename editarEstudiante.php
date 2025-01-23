@@ -36,7 +36,8 @@ $student = $result->fetch_assoc();
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <style>
         input[type="text"],
         select {
@@ -85,37 +86,18 @@ $student = $result->fetch_assoc();
 <body style="background-color: #1E2A38; color: #ffffff;">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-3" style="background-color: #000; color: #fff; min-width: 250px;">
-            <h3 class="text-center">EduFile</h3>
-            <nav class="nav flex-column">
-                <a href="index.php" class="nav-link text-white">
-                    <i class="bi bi-house-door"></i> Inicio
-                </a>
-                <div>
-                    <a class="nav-link text-white" data-bs-toggle="collapse" href="#nivelMenu" role="button" aria-expanded="false" aria-controls="nivelMenu">
-                        <i class="bi bi-box"></i> Niveles
-                    </a>
-                    <div class="collapse ms-3" id="nivelMenu">
-                        <a href="inicialCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Inicial</a>
-                        <a href="primariaCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Primaria</a>
-                        <a href="secundariaCursos.php" class="nav-link text-white"><i class="bi bi-circle"></i> Secundaria</a>
-                    </div>
-                </div>
-                <div>
-                    <a class="nav-link text-white" href="estudiantes.php">
-                        <i class="bi bi-people"></i> Estudiantes
-                    </a>
-                </div>
-            </nav>
-        </div>
+        <?php include 'sidebar.php'; ?>
+
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-3" style="max-width: 1200px; margin: auto;">
             <h2 class="mb-3">Editar Estudiante</h2>
-            <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar Estudiante</button>
+            <button class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal">Eliminar
+                Estudiante</button>
 
             <form action="actualizarEstudiante.php" method="POST">
-                <input type="hidden" name="original_rude" value="<?php echo htmlspecialchars($student['rude_number']); ?>">
+                <input type="hidden" name="original_rude"
+                    value="<?php echo htmlspecialchars($student['rude_number']); ?>">
                 <input type="hidden" name="grade" value="<?php echo htmlspecialchars($grade); ?>">
                 <input type="hidden" name="parallel" value="<?php echo htmlspecialchars($parallel); ?>">
 
@@ -125,36 +107,44 @@ $student = $result->fetch_assoc();
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="first_name" class="form-label">Nombres</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($student['first_name']); ?>" required>
+                            <input type="text" class="form-control" id="first_name" name="first_name"
+                                value="<?php echo htmlspecialchars($student['first_name']); ?>" required>
                         </div>
                         <div class="col-md-4">
                             <label for="last_name_father" class="form-label">Apellido Paterno</label>
-                            <input type="text" class="form-control" id="last_name_father" name="last_name_father" value="<?php echo htmlspecialchars($student['last_name_father']); ?>">
+                            <input type="text" class="form-control" id="last_name_father" name="last_name_father"
+                                value="<?php echo htmlspecialchars($student['last_name_father']); ?>">
                         </div>
                         <div class="col-md-4">
                             <label for="last_name_mother" class="form-label">Apellido Materno</label>
-                            <input type="text" class="form-control" id="last_name_mother" name="last_name_mother" value="<?php echo htmlspecialchars($student['last_name_mother']); ?>">
+                            <input type="text" class="form-control" id="last_name_mother" name="last_name_mother"
+                                value="<?php echo htmlspecialchars($student['last_name_mother']); ?>">
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-3">
                             <label for="identity_card" class="form-label">CI</label>
-                            <input type="text" class="form-control" id="identity_card" name="identity_card" value="<?php echo htmlspecialchars($student['identity_card']); ?>">
+                            <input type="text" class="form-control" id="identity_card" name="identity_card"
+                                value="<?php echo htmlspecialchars($student['identity_card']); ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="gender" class="form-label">Sexo</label>
                             <select class="form-select" id="gender" name="gender" required>
-                                <option value="M" <?php echo $student['gender'] === 'M' ? 'selected' : ''; ?>>Masculino</option>
-                                <option value="F" <?php echo $student['gender'] === 'F' ? 'selected' : ''; ?>>Femenino</option>
+                                <option value="M" <?php echo $student['gender'] === 'M' ? 'selected' : ''; ?>>Masculino
+                                </option>
+                                <option value="F" <?php echo $student['gender'] === 'F' ? 'selected' : ''; ?>>Femenino
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label for="birth_date" class="form-label">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" id="birth_date" name="birth_date" value="<?php echo htmlspecialchars($student['birth_date']); ?>">
+                            <input type="date" class="form-control" id="birth_date" name="birth_date"
+                                value="<?php echo htmlspecialchars($student['birth_date']); ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="rude_number" class="form-label">RUDE</label>
-                            <input type="text" class="form-control" id="rude_number" name="rude_number" value="<?php echo htmlspecialchars($student['rude_number']); ?>" required>
+                            <input type="text" class="form-control" id="rude_number" name="rude_number"
+                                value="<?php echo htmlspecialchars($student['rude_number']); ?>" required>
                         </div>
                     </div>
                 </div>
@@ -165,21 +155,27 @@ $student = $result->fetch_assoc();
                     <div class="row mb-2">
                         <div class="col-md-4">
                             <label for="guardian_first_name" class="form-label">Nombres</label>
-                            <input type="text" class="form-control" id="guardian_first_name" name="guardian_first_name" value="<?php echo htmlspecialchars($student['guardian_first_name']); ?>">
+                            <input type="text" class="form-control" id="guardian_first_name" name="guardian_first_name"
+                                value="<?php echo htmlspecialchars($student['guardian_first_name']); ?>">
                         </div>
                         <div class="col-md-4">
                             <label for="guardian_last_name" class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" id="guardian_last_name" name="guardian_last_name" value="<?php echo htmlspecialchars($student['guardian_last_name']); ?>">
+                            <input type="text" class="form-control" id="guardian_last_name" name="guardian_last_name"
+                                value="<?php echo htmlspecialchars($student['guardian_last_name']); ?>">
                         </div>
                         <div class="col-md-4">
                             <label for="guardian_identity_card" class="form-label">CI</label>
-                            <input type="text" class="form-control" id="guardian_identity_card" name="guardian_identity_card" value="<?php echo htmlspecialchars($student['guardian_identity_card']); ?>">
+                            <input type="text" class="form-control" id="guardian_identity_card"
+                                name="guardian_identity_card"
+                                value="<?php echo htmlspecialchars($student['guardian_identity_card']); ?>">
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="guardian_phone_number" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" id="guardian_phone_number" name="guardian_phone_number" value="<?php echo htmlspecialchars($student['guardian_phone_number']); ?>">
+                            <input type="text" class="form-control" id="guardian_phone_number"
+                                name="guardian_phone_number"
+                                value="<?php echo htmlspecialchars($student['guardian_phone_number']); ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="guardian_relationship" class="form-label">Relación</label>
@@ -194,7 +190,8 @@ $student = $result->fetch_assoc();
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">Actualizar</button>
-                    <a href="volanteEstudiante.php?student_id=<?php echo $student_id; ?>&grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>" target="_blank" class="btn btn-secondary">Vista Volante</a>
+                    <a href="volanteEstudiante.php?student_id=<?php echo $student_id; ?>&grade=<?php echo $grade; ?>&parallel=<?php echo $parallel; ?>"
+                        target="_blank" class="btn btn-secondary">Vista Volante</a>
                 </div>
             </form>
         </div>
@@ -208,12 +205,15 @@ $student = $result->fetch_assoc();
                     <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
                 </div>
                 <div class="modal-body" style="color:rgb(0, 0, 0);">
-                    <p>¿Está seguro de que desea eliminar al estudiante <strong><?php echo htmlspecialchars($student['first_name']); ?></strong>? Esta acción no se puede deshacer.</p>
+                    <p>¿Está seguro de que desea eliminar al estudiante
+                        <strong><?php echo htmlspecialchars($student['first_name']); ?></strong>? Esta acción no se
+                        puede deshacer.</p>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="eliminarEstudiante.php?student_id=<?php echo $student_id; ?>" class="btn btn-danger">Eliminar</a>
+                    <a href="eliminarEstudiante.php?student_id=<?php echo $student_id; ?>"
+                        class="btn btn-danger">Eliminar</a>
                 </div>
             </div>
         </div>

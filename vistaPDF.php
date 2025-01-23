@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Estudiantes</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Incluye tus enlaces a CSS y otros elementos del head aquí -->
     <style>
         body {
             background-color: #ffffff;
@@ -70,40 +69,60 @@
     <?php
     include 'conexion.php';
 
+    // Obtener parámetros desde la URL
     $grade = isset($_GET['grade']) ? $_GET['grade'] : '';
     $parallel = isset($_GET['parallel']) ? $_GET['parallel'] : '';
+    $levelName = isset($_GET['level']) ? $_GET['level'] : '';
 
-    // Obtener nivel del curso
-    $levelQuery = "SELECT levels.name AS level_name
-                   FROM levels
-                   INNER JOIN courses ON levels.id = courses.level_id
-                   WHERE courses.grade = ? AND courses.parallel = ? LIMIT 1";
+    // Verificar que los parámetros sean válidos
+    if (empty($grade) || empty($parallel) || empty($levelName)) {
+        echo "<div class='alert alert-danger'>Parámetros de curso no válidos.</div>";
+        exit;
+    }
+
+    // Obtener level_id basado en el nombre del nivel
+    $levelQuery = "SELECT id FROM levels WHERE name = ?";
     $stmt = $conn->prepare($levelQuery);
-    $stmt->bind_param("ss", $grade, $parallel);
+    $stmt->bind_param("s", $levelName);
     $stmt->execute();
     $levelResult = $stmt->get_result();
 
     if ($levelResult && $levelResult->num_rows > 0) {
         $levelData = $levelResult->fetch_assoc();
-        $levelName = $levelData['level_name'];
+        $levelId = $levelData['id'];
     } else {
-        $levelName = 'NIVEL DESCONOCIDO';
+        echo "<div class='alert alert-danger'>Nivel no válido.</div>";
+        exit;
     }
 
-    // Obtener estudiantes con estado "Efectivo - I"
+    // Obtener course_id basado en grade, parallel y level_id
+    $courseQuery = "SELECT id FROM courses WHERE grade = ? AND parallel = ? AND level_id = ?";
+    $stmt = $conn->prepare($courseQuery);
+    $stmt->bind_param("ssi", $grade, $parallel, $levelId);
+    $stmt->execute();
+    $courseResult = $stmt->get_result();
+
+    if ($courseResult && $courseResult->num_rows > 0) {
+        $courseData = $courseResult->fetch_assoc();
+        $courseId = $courseData['id'];
+    } else {
+        echo "<div class='alert alert-danger'>Curso no válido.</div>";
+        exit;
+    }
+
+    // Obtener estudiantes con estado "Efectivo - I" para el curso específico
     $query = "SELECT UPPER(s.last_name_father) AS last_name_father,
                      UPPER(s.last_name_mother) AS last_name_mother,
                      UPPER(s.first_name) AS first_name
               FROM students s
               INNER JOIN student_courses sc ON s.id = sc.student_id
-              INNER JOIN courses c ON sc.course_id = c.id
-              WHERE c.grade = ? AND c.parallel = ? AND sc.status = 'Efectivo - I'
+              WHERE sc.course_id = ? AND sc.status = 'Efectivo - I'
               ORDER BY
                 s.last_name_father ASC,
                 s.last_name_mother ASC,
                 s.first_name ASC";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ss", $grade, $parallel);
+    $stmt->bind_param("i", $courseId);
     $stmt->execute();
     $result = $stmt->get_result();
     ?>
@@ -153,6 +172,8 @@
                               </tr>";
                         $index++;
                     }
+                } else {
+                    echo "<tr><td colspan='9'>No se encontraron estudiantes con el estado 'Efectivo - I' para este curso.</td></tr>";
                 }
 
                 // Agregar filas vacías si no se alcanzan las 27
