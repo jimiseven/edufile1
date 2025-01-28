@@ -1,16 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+include 'conexion.php'; // Incluir conexión a la base de datos
+?>
 
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Estudiantes</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
-        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
+        /* Estilos generales */
+        body {
+            background-color: #1E2A38;
+            color: #ffffff;
+        }
+
+        .sidebar {
+            background-color: #000;
+            min-width: 250px;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #ffffff;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #2C3E50;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #3498db;
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
         .table {
             background-color: #2C3E50;
             color: #ffffff;
@@ -61,15 +97,35 @@
         .btn-new-student:hover {
             background-color: #218838;
         }
+
+        .alert-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            padding: 15px 20px;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .alert-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
-
-<body style="background-color: #1E2A38; color: #ffffff;">
+<body>
     <div class="d-flex">
-        <!-- Sidebar -->
+        <!-- Incluir el sidebar -->
         <?php include 'sidebar.php'; ?>
-        <!-- Main Content -->
-        <div class="main-content flex-grow-1 p-4">
+
+        <!-- Contenido principal -->
+        <div class="main-content">
             <h2 class="mb-4">Lista de Estudiantes</h2>
 
             <div class="action-buttons">
@@ -82,7 +138,6 @@
                     <a href="nuevoRegistroEstudiante.php" class="btn btn-new-student">Nuevo Estudiante</a>
                 </div>
             </div>
-
 
             <table class="table table-bordered" id="studentsTable">
                 <thead>
@@ -98,9 +153,6 @@
                 </thead>
                 <tbody>
                     <?php
-                    // Incluir conexión a la base de datos
-                    include 'conexion.php';
-
                     $query = "
                         SELECT s.last_name_father, s.last_name_mother, s.first_name, l.name AS level_name, c.grade, c.parallel, s.rude_number
                         FROM students s
@@ -208,31 +260,5 @@
             }
         });
     </script>
-
-
-    <style>
-        .alert-popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1050;
-            padding: 15px 20px;
-            background-color: #dc3545;
-            /* Rojo de Bootstrap */
-            color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .alert-popup.show {
-            opacity: 1;
-            visibility: visible;
-        }
-    </style>
-
 </body>
-
 </html>

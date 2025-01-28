@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,30 +10,51 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Estilos Personalizados -->
     <style>
+        :root {
+            --color-primary: #3498db;    --color-secondary: #2ecc71;
+            --color-accent: #e74c3c;     --color-warning: #f1c40f;
+            --color-dark: #2c3e50;       --color-pink: #e91e63;
+        }
+
         body {
-            background-color: #1E2A38; /* Fondo oscuro original */
+            background-color: #1E2A38;
             color: #ffffff;
         }
 
+        /* Sidebar actualizado para coincidir con estudiantes.php */
         .sidebar {
-            background-color: #000; /* Fondo del sidebar original */
-            color: #fff;
+            background-color: #000;
             min-width: 250px;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        .sidebar .nav-link,
+        .sidebar .nav-link {
+            color: #ffffff;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
         .sidebar .nav-link:hover {
-            color: #fff;
+            background-color: #2C3E50;
         }
 
+        .sidebar .nav-link.active {
+            background-color: #3498db;
+            font-weight: bold;
+        }
+
+        /* Contenedor principal */
         .main-content {
             flex-grow: 1;
             padding: 20px;
         }
 
+        /* Estilos específicos de inicialCursos.php */
         .course-card {
-            background-color: #2C3E50; /* Color original de las tarjetas */
+            background-color: #2C3E50;
             border: 1px solid #1F618D;
             border-radius: 10px;
             margin-bottom: 15px;
@@ -49,7 +69,7 @@
         .course-title {
             font-size: 1.25rem;
             margin-bottom: 5px;
-            color: #1ABC9C; /* Color original para títulos */
+            color: #1ABC9C;
             font-weight: bold;
             text-align: center;
         }
@@ -64,31 +84,31 @@
         }
 
         .badge-total {
-            background-color: #34495E; /* Gris oscuro */
+            background-color: #34495E;
         }
 
         .badge-efectivos {
-            background-color: #27AE60; /* Verde para efectivos */
+            background-color: #27AE60;
         }
 
         .badge-noinscritos {
-            background-color: #C0392B; /* Rojo para no inscritos */
+            background-color: #C0392B;
         }
 
         .progress {
             height: 8px;
-            background-color: #34495E; /* Gris oscuro */
+            background-color: #34495E;
             border-radius: 5px;
             overflow: hidden;
             margin-bottom: 10px;
         }
 
         .progress-bar {
-            background-color: #1ABC9C; /* Color para la barra de progreso */
+            background-color: #1ABC9C;
         }
 
         .btn-view {
-            background-color: #1F618D; /* Azul original para botones */
+            background-color: #1F618D;
             border: none;
             width: 100%;
             font-weight: bold;
@@ -100,13 +120,8 @@
         }
 
         .porcentaje-efectivos {
-            color: #ffffff; /* Color blanco para el texto del porcentaje */
+            color: #ffffff;
             font-weight: bold;
-        }
-
-        .nav-link.active {
-            background-color: #1F618D;
-            color: #ffffff !important;
         }
 
         @media (max-width: 768px) {
@@ -121,14 +136,16 @@
         }
     </style>
 </head>
-
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
-        <?php include 'sidebar.php'; ?>
+        <?php 
+        // Definir la página actual para resaltar el enlace en el sidebar
+        $currentPage = 'inicial';
+        include 'sidebar.php'; 
+        ?>
 
-
-        <!-- Main Content -->
+        <!-- Contenido principal -->
         <div class="main-content">
             <h2 class="mb-4">Nivel Inicial - Cursos</h2>
             <div class="row">
@@ -192,5 +209,4 @@
     <!-- Bootstrap JS -->
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
