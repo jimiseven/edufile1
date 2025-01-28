@@ -65,6 +65,18 @@
             font-weight: bold;
             text-align: center;
         }
+
+        .curso-info {
+            background-color: #34495E;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .curso-info p {
+            margin: 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -72,7 +84,6 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
-
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
@@ -105,6 +116,30 @@
             echo "<h2 class='mb-4'>NIVEL: $levelName</h2>";
             echo "<h3 class='mb-4'>CURSO: $grade \"$parallel\"</h3>";
 
+            // Obtener estadísticas del curso
+            $statsQuery = "SELECT 
+                            SUM(CASE WHEN sc.status = 'No Inscrito' THEN 1 ELSE 0 END) AS no_inscritos,
+                            SUM(CASE WHEN sc.status = 'Efectivo - I' THEN 1 ELSE 0 END) AS efectivos,
+                            SUM(CASE WHEN s.gender = 'M' THEN 1 ELSE 0 END) AS masculinos,
+                            SUM(CASE WHEN s.gender = 'F' THEN 1 ELSE 0 END) AS femeninos
+                          FROM students s
+                          INNER JOIN student_courses sc ON s.id = sc.student_id
+                          INNER JOIN courses c ON sc.course_id = c.id
+                          WHERE c.grade = ? AND c.parallel = ? AND c.level_id = (SELECT id FROM levels WHERE name = ?)";
+
+            $stmt = $conn->prepare($statsQuery);
+            $stmt->bind_param("sss", $grade, $parallel, $level);
+            $stmt->execute();
+            $statsResult = $stmt->get_result();
+            $stats = $statsResult->fetch_assoc();
+
+            echo "<div class='curso-info'>
+                    <p>No Inscritos: " . $stats['no_inscritos'] . "</p>
+                    <p>Efectivos: " . $stats['efectivos'] . "</p>
+                    <p>Masculinos: " . $stats['masculinos'] . "</p>
+                    <p>Femeninos: " . $stats['femeninos'] . "</p>
+                  </div>";
+
             $query = "SELECT s.id, UPPER(CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name)) AS nombre, UPPER(s.rude_number) AS rude_number, sc.status
                       FROM students s
                       INNER JOIN student_courses sc ON s.id = sc.student_id
@@ -131,6 +166,7 @@
             <table class="table table-bordered" id="studentsTable">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Nombre</th>
                         <th>Rude</th>
                         <th>Estado</th>
@@ -140,6 +176,7 @@
                 <tbody>
                     <?php
                     if ($result && $result->num_rows > 0) {
+                        $counter = 1;
                         while ($row = $result->fetch_assoc()) {
                             $estado_color = match ($row['status']) {
                                 'Efectivo - I' => '#28a745',
@@ -147,6 +184,7 @@
                                 default => '#6c757d',
                             };
                             echo "<tr>
+                                    <td>" . $counter . "</td>
                                     <td>" . htmlspecialchars($row['nombre']) . "</td>
                                     <td>" . htmlspecialchars($row['rude_number']) . "</td>
                                     <td>
@@ -160,9 +198,10 @@
                                     </td>
                                     <td><a href='editarEstudiante.php?student_id=" . htmlspecialchars($row['rude_number']) . "&grade=$grade&parallel=$parallel' class='btn btn-primary btn-sm'>Editar</a></td>
                                   </tr>";
+                            $counter++;
                         }
                     } else {
-                        echo "<tr><td colspan='4' class='text-center'>NO HAY ESTUDIANTES DISPONIBLES</td></tr>";
+                        echo "<tr><td colspan='5' class='text-center'>NO HAY ESTUDIANTES DISPONIBLES</td></tr>";
                     }
 
                     $stmt->close();
@@ -227,8 +266,8 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].getElementsByTagName('td');
-                    const studentName = cells[0]?.textContent.toLowerCase() || '';
-                    const studentRude = cells[1]?.textContent.toLowerCase() || '';
+                    const studentName = cells[1]?.textContent.toLowerCase() || '';
+                    const studentRude = cells[2]?.textContent.toLowerCase() || '';
 
                     if (studentName.includes(searchValue) || studentRude.includes(searchValue)) {
                         rows[i].style.display = '';
