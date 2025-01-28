@@ -176,7 +176,7 @@ $resultByCourse = $conn->query($queryByCourse);
 
         <!-- Contenido principal -->
         <div class="main-content">
-            <!-- Totales Generales -->
+            <!-- Conteo total -->
             <div class="totales-generales">
                 <h3 class="mb-4"><i class="bi bi-building me-2"></i>Totales Generales</h3>
                 <div class="row">
