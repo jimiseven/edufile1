@@ -66,16 +66,39 @@
             text-align: center;
         }
 
-        .curso-info {
-            background-color: #34495E;
-            padding: 10px;
-            border-radius: 5px;
+        .curso-info-container {
+            display: flex;
+            justify-content: flex-end;
             margin-bottom: 20px;
         }
 
-        .curso-info p {
+        .curso-info-card {
+            background-color: #34495E;
+            border-radius: 10px;
+            padding: 15px;
+            margin-left: 10px;
+            text-align: center;
+            width: 180px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .curso-info-card i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #1ABC9C;
+        }
+
+        .curso-info-card h5 {
+            font-size: 16px;
             margin: 0;
-            font-size: 14px;
+            color: #ECF0F1;
+        }
+
+        .curso-info-card p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -132,14 +155,34 @@
             $stmt->execute();
             $statsResult = $stmt->get_result();
             $stats = $statsResult->fetch_assoc();
+            ?>
 
-            echo "<div class='curso-info'>
-                    <p>No Inscritos: " . $stats['no_inscritos'] . "</p>
-                    <p>Efectivos: " . $stats['efectivos'] . "</p>
-                    <p>Masculinos: " . $stats['masculinos'] . "</p>
-                    <p>Femeninos: " . $stats['femeninos'] . "</p>
-                  </div>";
+            <!-- Diseño mejorado para la información del curso -->
+            <div class="curso-info-container">
+                <div class="curso-info-card">
+                    <i class="bi bi-person-x"></i>
+                    <h5>No Inscritos</h5>
+                    <p><?php echo $stats['no_inscritos']; ?></p>
+                </div>
+                <div class="curso-info-card">
+                    <i class="bi bi-person-check"></i>
+                    <h5>Efectivos</h5>
+                    <p><?php echo $stats['efectivos']; ?></p>
+                </div>
+                <div class="curso-info-card">
+                    <i class="bi bi-gender-male"></i>
+                    <h5>Masculinos</h5>
+                    <p><?php echo $stats['masculinos']; ?></p>
+                </div>
+                <div class="curso-info-card">
+                    <i class="bi bi-gender-female"></i>
+                    <h5>Femeninos</h5>
+                    <p><?php echo $stats['femeninos']; ?></p>
+                </div>
+            </div>
 
+            <?php
+            // Consulta para obtener los estudiantes del curso
             $query = "SELECT s.id, UPPER(CONCAT(s.last_name_father, ' ', s.last_name_mother, ' ', s.first_name)) AS nombre, UPPER(s.rude_number) AS rude_number, sc.status
                       FROM students s
                       INNER JOIN student_courses sc ON s.id = sc.student_id
@@ -151,6 +194,11 @@
             $stmt->bind_param("sss", $grade, $parallel, $level);
             $stmt->execute();
             $result = $stmt->get_result();
+
+            if (!$result) {
+                echo "<div class='error-message'>Error al obtener los estudiantes: " . $conn->error . "</div>";
+                exit;
+            }
             ?>
 
             <div class="action-buttons">
@@ -175,7 +223,7 @@
                 </thead>
                 <tbody>
                     <?php
-                    if ($result && $result->num_rows > 0) {
+                    if ($result->num_rows > 0) {
                         $counter = 1;
                         while ($row = $result->fetch_assoc()) {
                             $estado_color = match ($row['status']) {
