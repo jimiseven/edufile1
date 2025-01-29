@@ -18,6 +18,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
             color: #ffffff;
         }
 
+        /* Estilos del sidebar (restaurados) */
         .sidebar {
             background-color: #000;
             min-width: 250px;
@@ -42,24 +43,59 @@ include 'conexion.php'; // Incluir conexión a la base de datos
             font-weight: bold;
         }
 
+        /* Estilos de la tabla (mejorados) */
         .main-content {
             flex-grow: 1;
             padding: 20px;
         }
 
-        .table {
-            background-color: #2C3E50;
-            color: #ffffff;
+        .table-container {
+            background: #2C3E50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .table th {
+        .table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table thead th {
             background-color: #34495E;
             color: #ECF0F1;
+            padding: 16px;
+            font-weight: 600;
+            border-bottom: 2px solid #1E2A38;
         }
 
-        .table td {
+        .table tbody td {
             background-color: #3E4A59;
             color: #ECF0F1;
+            padding: 14px;
+            border-bottom: 1px solid #2C3E50;
+            transition: background-color 0.2s ease;
+        }
+
+        .table tbody tr:hover td {
+            background-color: #47535f;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .action-buttons {
@@ -130,7 +166,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
 
             <div class="action-buttons">
                 <div class="search-container">
-                    <input type="text" id="searchStudent" class="form-control" placeholder="Buscar estudiante...">
+                    <input type="text" id="searchStudent" class="form-control" placeholder="Buscar estudiante por nombre, apellido o RUDE...">
                     <button class="btn btn-clear" id="clearSearch">&times;</button>
                 </div>
                 <div class="d-flex flex-column">
@@ -139,53 +175,55 @@ include 'conexion.php'; // Incluir conexión a la base de datos
                 </div>
             </div>
 
-            <table class="table table-bordered" id="studentsTable">
-                <thead>
-                    <tr>
-                        <th>Apellido Paterno</th>
-                        <th>Apellido Materno</th>
-                        <th>Nombres</th>
-                        <th>Nivel</th>
-                        <th>Curso</th>
-                        <th>Paralelo</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $query = "
-                        SELECT s.last_name_father, s.last_name_mother, s.first_name, l.name AS level_name, c.grade, c.parallel, s.rude_number
-                        FROM students s
-                        INNER JOIN student_courses sc ON s.id = sc.student_id
-                        INNER JOIN courses c ON sc.course_id = c.id
-                        INNER JOIN levels l ON c.level_id = l.id
-                        ORDER BY s.last_name_father ASC, s.last_name_mother ASC, s.first_name ASC
-                    ";
+            <div class="table-container">
+                <table class="table" id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>Apellido Paterno</th>
+                            <th>Apellido Materno</th>
+                            <th>Nombres</th>
+                            <th>Nivel</th>
+                            <th>Curso</th>
+                            <th>Paralelo</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $query = "
+                            SELECT s.last_name_father, s.last_name_mother, s.first_name, l.name AS level_name, c.grade, c.parallel, s.rude_number
+                            FROM students s
+                            INNER JOIN student_courses sc ON s.id = sc.student_id
+                            INNER JOIN courses c ON sc.course_id = c.id
+                            INNER JOIN levels l ON c.level_id = l.id
+                            ORDER BY s.last_name_father ASC, s.last_name_mother ASC, s.first_name ASC
+                        ";
 
-                    $result = $conn->query($query);
+                        $result = $conn->query($query);
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                <td>" . htmlspecialchars($row['last_name_father']) . "</td>
-                                <td>" . htmlspecialchars($row['last_name_mother']) . "</td>
-                                <td>" . htmlspecialchars($row['first_name']) . "</td>
-                                <td>" . htmlspecialchars($row['level_name']) . "</td>
-                                <td>" . htmlspecialchars($row['grade']) . "</td>
-                                <td>" . htmlspecialchars($row['parallel']) . "</td>
-                                <td>
-                                    <a href='editarEstudiante.php?student_id=" . urlencode($row['rude_number']) . "&grade=" . urlencode($row['grade']) . "&parallel=" . urlencode($row['parallel']) . "' class='btn btn-primary btn-sm'>Editar</a>
-                                </td>
-                            </tr>";
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>" . htmlspecialchars($row['last_name_father']) . "</td>
+                                    <td>" . htmlspecialchars($row['last_name_mother']) . "</td>
+                                    <td>" . htmlspecialchars($row['first_name']) . "</td>
+                                    <td>" . htmlspecialchars($row['level_name']) . "</td>
+                                    <td>" . htmlspecialchars($row['grade']) . "</td>
+                                    <td>" . htmlspecialchars($row['parallel']) . "</td>
+                                    <td>
+                                        <a href='editarEstudiante.php?student_id=" . urlencode($row['rude_number']) . "&grade=" . urlencode($row['grade']) . "&parallel=" . urlencode($row['parallel']) . "' class='btn btn-primary btn-sm btn-action'>Editar</a>
+                                    </td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='7' class='text-center'>No hay estudiantes disponibles</td></tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='7' class='text-center'>No hay estudiantes disponibles</td></tr>";
-                    }
 
-                    $conn->close();
-                    ?>
-                </tbody>
-            </table>
+                        $conn->close();
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -205,12 +243,18 @@ include 'conexion.php'; // Incluir conexión a la base de datos
                     const cells = rows[i].getElementsByTagName('td');
                     let found = false;
 
-                    for (let j = 0; j < cells.length; j++) {
-                        const cellText = cells[j].textContent.toLowerCase();
-                        if (cellText.includes(searchValue)) {
-                            found = true;
-                            break;
-                        }
+                    // Buscar en nombre, apellidos y RUDE
+                    const fullName = cells[0].textContent.toLowerCase() + ' ' + 
+                                   cells[1].textContent.toLowerCase() + ' ' + 
+                                   cells[2].textContent.toLowerCase();
+                    const rudeNumber = rows[i].querySelector('a[href*="editarEstudiante.php"]')
+                                            .getAttribute('href')
+                                            .split('student_id=')[1]
+                                            .split('&')[0]
+                                            .toLowerCase();
+
+                    if (fullName.includes(searchValue) || rudeNumber.includes(searchValue)) {
+                        found = true;
                     }
 
                     rows[i].style.display = found ? '' : 'none';
@@ -230,14 +274,12 @@ include 'conexion.php'; // Incluir conexión a la base de datos
     <div id="alertPopup" class="alert-popup">Estudiante eliminado correctamente.</div>
 
     <script>
-        // Mostrar el pop-up si se pasa el estado 'deleted' en la URL
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('status') && urlParams.get('status') === 'deleted') {
                 const alertPopup = document.getElementById('alertPopup');
                 alertPopup.classList.add('show');
 
-                // Ocultar el pop-up después de 1 segundo
                 setTimeout(() => {
                     alertPopup.classList.remove('show');
                 }, 1500);
