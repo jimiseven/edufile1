@@ -156,7 +156,6 @@
             $statsResult = $stmt->get_result();
             $stats = $statsResult->fetch_assoc();
             ?>
-
             <!-- Diseño mejorado para la información del curso -->
             <div class="curso-info-container">
                 <div class="curso-info-card">
@@ -244,7 +243,7 @@
                                             <button type='button' class='btn btn-sm estado-guardar'>Guardar</button>
                                         </form>
                                     </td>
-                                    <td><a href='editarEstudiante.php?student_id=" . htmlspecialchars($row['rude_number']) . "&grade=$grade&parallel=$parallel' class='btn btn-primary btn-sm'>Editar</a></td>
+                                    <td><a href='editarEstudiante.php?student_id=" . htmlspecialchars($row['rude_number']) . "&source=vistaGenCurso&grade=$grade&parallel=$parallel&level=$level' class='btn btn-primary btn-sm'>Editar</a></td>
                                   </tr>";
                             $counter++;
                         }

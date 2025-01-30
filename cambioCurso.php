@@ -77,86 +77,160 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_student'])) {
     <title>Cambiar Nivel, Curso o Paralelo</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        .form-section {
-            background-color: #2C3E50;
+        body {
+            background-color: #1E2A38;
+            color: #ffffff;
+        }
+
+        .sidebar {
+            background-color: #000;
+            min-width: 250px;
+            min-height: 100vh;
             padding: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto; /* Make main content scrollable if needed */
+            max-height: 100vh;
+        }
+
+        .form-container {
+            background-color: #2C3E50;
+            padding: 2rem;
             border-radius: 10px;
-            margin-bottom: 20px;
-            color: white;
+            max-width: 1200px;
+            margin: 2rem auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #34495E;
+            border-radius: 8px;
         }
 
         .form-section h4 {
-            margin-bottom: 20px;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #47535f;
+        }
+
+        .form-label {
+            color: #ECF0F1;
+            font-weight: 500;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #3E4A59;
+            border: 1px solid #47535f;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #47535f;
+            border-color: #3498db;
+            box-shadow: none;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .form-control[disabled] {
+            background-color: #47535f;
+            color: #ECF0F1;
         }
     </style>
 </head>
 
-<body style="background-color: #1E2A38; color: white;">
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Cambiar Nivel, Curso o Paralelo</h2>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <?php include 'sidebar.php'; ?>
 
-        <!-- Mensajes -->
-        <?php if ($success): ?>
-            <div class="alert alert-success">El estudiante fue actualizado correctamente.</div>
-        <?php elseif ($error): ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
-        <?php endif; ?>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="form-container">
+                <h2 class="text-center mb-4">Cambiar Nivel, Curso o Paralelo</h2>
 
-        <!-- Formulario de Búsqueda -->
-        <div class="form-section">
-            <h4>Buscar Estudiante</h4>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="search_rude" class="form-label">RUDE del Estudiante</label>
-                    <input type="text" class="form-control" id="search_rude" name="search_rude" required>
+                <!-- Mensajes -->
+                <?php if ($success): ?>
+                    <div class="alert alert-success">El estudiante fue actualizado correctamente.</div>
+                <?php elseif ($error): ?>
+                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                <?php endif; ?>
+
+                <!-- Formulario de Búsqueda -->
+                <div class="form-section">
+                    <h4>Buscar Estudiante</h4>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="search_rude" class="form-label">RUDE del Estudiante</label>
+                            <input type="text" class="form-control" id="search_rude" name="search_rude" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </form>
-        </div>
 
-        <!-- Formulario de Actualización -->
-        <?php if ($student): ?>
-            <div class="form-section">
-                <h4>Actualizar Información del Estudiante</h4>
-                <form method="POST">
-                    <input type="hidden" name="rude_number" value="<?php echo htmlspecialchars($student['rude_number']); ?>">
+                <!-- Formulario de Actualización -->
+                <?php if ($student): ?>
+                    <div class="form-section">
+                        <h4>Actualizar Información del Estudiante</h4>
+                        <form method="POST">
+                            <input type="hidden" name="rude_number" value="<?php echo htmlspecialchars($student['rude_number']); ?>">
 
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del Estudiante</label>
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name_father'] . ' ' . $student['last_name_mother']); ?>" disabled>
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del Estudiante</label>
+                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name_father'] . ' ' . $student['last_name_mother']); ?>" disabled style="background-color: #47535f; color: #ECF0F1;">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="level" class="form-label">Nivel</label>
+                                <select class="form-select" id="level" name="level" required onchange="loadCourses(this.value)">
+                                    <option value="">Seleccione un nivel</option>
+                                    <?php foreach ($levels as $level): ?>
+                                        <option value="<?php echo $level['id']; ?>" <?php echo $student['level_id'] == $level['id'] ? 'selected' : ''; ?>>
+                                            <?php echo $level['name']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="course" class="form-label">Curso</label>
+                                <select class="form-select" id="course" name="course" required onchange="loadParallels(this.value)">
+                                    <option value="">Seleccione un curso</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="parallel" class="form-label">Paralelo</label>
+                                <select class="form-select" id="parallel" name="parallel" required>
+                                    <option value="">Seleccione un paralelo</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" name="update_student" class="btn btn-success">Actualizar</button>
+                        </form>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="level" class="form-label">Nivel</label>
-                        <select class="form-select" id="level" name="level" required onchange="loadCourses(this.value)">
-                            <option value="">Seleccione un nivel</option>
-                            <?php foreach ($levels as $level): ?>
-                                <option value="<?php echo $level['id']; ?>" <?php echo $student['level_id'] == $level['id'] ? 'selected' : ''; ?>>
-                                    <?php echo $level['name']; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="course" class="form-label">Curso</label>
-                        <select class="form-select" id="course" name="course" required onchange="loadParallels(this.value)">
-                            <option value="">Seleccione un curso</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="parallel" class="form-label">Paralelo</label>
-                        <select class="form-select" id="parallel" name="parallel" required>
-                            <option value="">Seleccione un paralelo</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" name="update_student" class="btn btn-success">Actualizar</button>
-                </form>
+                <?php endif; ?>
             </div>
-        <?php endif; ?>
+        </div>
     </div>
 
     <script src="js/bootstrap.bundle.min.js"></script>

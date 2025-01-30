@@ -4,6 +4,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +25,9 @@ include 'conexion.php'; // Incluir conexión a la base de datos
             min-width: 250px;
             min-height: 100vh;
             padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .sidebar .nav-link {
@@ -47,12 +51,15 @@ include 'conexion.php'; // Incluir conexión a la base de datos
         .main-content {
             flex-grow: 1;
             padding: 20px;
+            overflow-y: auto;
+            max-height: 100vh;
+            margin-left: 250px;
         }
 
         .table-container {
             background: #2C3E50;
             border-radius: 8px;
-            overflow: hidden;
+            overflow: auto; /* Added overflow auto for the table container */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -68,6 +75,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
             padding: 16px;
             font-weight: 600;
             border-bottom: 2px solid #1E2A38;
+            text-align: left;
         }
 
         .table tbody td {
@@ -155,6 +163,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
         }
     </style>
 </head>
+
 <body>
     <div class="d-flex">
         <!-- Incluir el sidebar -->
@@ -211,7 +220,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
                                     <td>" . htmlspecialchars($row['grade']) . "</td>
                                     <td>" . htmlspecialchars($row['parallel']) . "</td>
                                     <td>
-                                        <a href='editarEstudiante.php?student_id=" . urlencode($row['rude_number']) . "&grade=" . urlencode($row['grade']) . "&parallel=" . urlencode($row['parallel']) . "' class='btn btn-primary btn-sm btn-action'>Editar</a>
+                                        <a href='editarEstudiante.php?student_id=" . urlencode($row['rude_number']) . "&source=estudiantes' class='btn btn-primary btn-sm btn-action'>Editar</a>
                                     </td>
                                 </tr>";
                             }
@@ -236,7 +245,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
             const table = document.getElementById('studentsTable');
             const rows = table.getElementsByTagName('tr');
 
-            searchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function() {
                 const searchValue = this.value.toLowerCase();
 
                 for (let i = 1; i < rows.length; i++) {
@@ -244,14 +253,13 @@ include 'conexion.php'; // Incluir conexión a la base de datos
                     let found = false;
 
                     // Buscar en nombre, apellidos y RUDE
-                    const fullName = cells[0].textContent.toLowerCase() + ' ' + 
-                                   cells[1].textContent.toLowerCase() + ' ' + 
-                                   cells[2].textContent.toLowerCase();
+                    const fullName = cells[0].textContent.toLowerCase() + ' ' +
+                        cells[1].textContent.toLowerCase() + ' ' +
+                        cells[2].textContent.toLowerCase();
                     const rudeNumber = rows[i].querySelector('a[href*="editarEstudiante.php"]')
-                                            .getAttribute('href')
-                                            .split('student_id=')[1]
-                                            .split('&')[0]
-                                            .toLowerCase();
+                        .getAttribute('href')
+                        .split('student_id=')[1]
+                        .toLowerCase();
 
                     if (fullName.includes(searchValue) || rudeNumber.includes(searchValue)) {
                         found = true;
@@ -261,7 +269,7 @@ include 'conexion.php'; // Incluir conexión a la base de datos
                 }
             });
 
-            clearButton.addEventListener('click', function () {
+            clearButton.addEventListener('click', function() {
                 searchInput.value = '';
                 for (let i = 1; i < rows.length; i++) {
                     rows[i].style.display = '';
@@ -303,4 +311,5 @@ include 'conexion.php'; // Incluir conexión a la base de datos
         });
     </script>
 </body>
+
 </html>
