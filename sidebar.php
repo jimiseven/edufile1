@@ -31,9 +31,31 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         <!-- Enlace para Imprimir Listas -->
         <div class="mt-3">
-            <a class="nav-link text-white <?= ($currentPage == 'imprimirListas.php') ? 'active' : '' ?>" href="imprimirListas.php" target="_blank">
+            <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#listOptionsModal">
                 <i class="bi bi-printer"></i> Imprimir Listas - Respaldo
             </a>
         </div>
     </nav>
+
+    <!-- Modal for List Options -->
+    <div class="modal fade" id="listOptionsModal" tabindex="-1" aria-labelledby="listOptionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="listOptionsModalLabel" style="color: black;">Opciones de Listas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="color: black;">
+                    <p>Seleccione el tipo de lista que desea imprimir:</p>
+                    <div class="d-grid gap-2">
+                        <a href="imprimirListas.php" class="btn btn-info" target="_blank">Listas Completas</a>
+                        <a href="imprimirListas2.php" class="btn btn-info" target="_blank">Listas de Efectivos</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

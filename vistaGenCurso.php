@@ -100,6 +100,11 @@
             margin: 0;
             color: #ffffff;
         }
+
+        /* Estilo para el título del modal en color negro */
+        .modal-title {
+            color: #000000; /* Establece el color del texto a negro */
+        }
     </style>
 </head>
 
@@ -262,11 +267,11 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="printModalLabel">Seleccionar Orientación de Impresión</h5>
+                            <h5 class="modal-title" id="printModalLabel" style="color: black;">Seleccionar Orientación de Impresión</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p>¿Cómo desea generar la vista PDF?</p>
+                            <p style="color: black;">¿Cómo desea generar la vista PDF?</p>
                             <div class="d-grid gap-2">
                                 <button type="button" class="btn btn-outline-secondary btn-print-vertical">Vertical</button>
                                 <button type="button" class="btn btn-outline-secondary btn-print-horizontal">Horizontal</button>
@@ -298,7 +303,7 @@
                 const grade = '<?php echo urlencode($grade); ?>';
                 const parallel = '<?php echo urlencode($parallel); ?>';
                 const level = '<?php echo urlencode($level); ?>';
-                window.open(`vistaPDFv.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
+                window.open(`vistaPDF.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
                 bootstrap.Modal.getInstance(printModal).hide(); // Close modal after redirect
             });
 
