@@ -140,7 +140,7 @@
             echo "<h3 class='mb-4'>CURSO: $grade \"$parallel\"</h3>";
 
             // Obtener estadísticas del curso
-            $statsQuery = "SELECT 
+            $statsQuery = "SELECT
                             SUM(CASE WHEN sc.status = 'No Inscrito' THEN 1 ELSE 0 END) AS no_inscritos,
                             SUM(CASE WHEN sc.status = 'Efectivo - I' THEN 1 ELSE 0 END) AS efectivos,
                             SUM(CASE WHEN s.gender = 'M' THEN 1 ELSE 0 END) AS masculinos,
@@ -206,7 +206,7 @@
                     <button class="btn btn-light" id="clearSearch" title="Borrar búsqueda">&times;</button>
                 </div>
                 <div>
-                    <a href="vistaPDF.php?grade=<?php echo urlencode($grade); ?>&parallel=<?php echo urlencode($parallel); ?>&level=<?php echo urlencode($level); ?>" class="btn btn-secondary" target="_blank">Vista PDF</a>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#printModal">Vista PDF</button>
                 </div>
             </div>
 
@@ -256,6 +256,29 @@
                     ?>
                 </tbody>
             </table>
+
+            <!-- Modal de Impresión -->
+            <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="printModalLabel">Seleccionar Orientación de Impresión</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Cómo desea generar la vista PDF?</p>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-print-vertical">Vertical</button>
+                                <button type="button" class="btn btn-outline-secondary btn-print-horizontal">Horizontal</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -267,6 +290,26 @@
             const clearButton = document.getElementById('clearSearch');
             const table = document.getElementById('studentsTable');
             const rows = table.getElementsByTagName('tr');
+            const printModal = document.getElementById('printModal');
+            const printVerticalButton = printModal.querySelector('.btn-print-vertical');
+            const printHorizontalButton = printModal.querySelector('.btn-print-horizontal');
+
+            printVerticalButton.addEventListener('click', function() {
+                const grade = '<?php echo urlencode($grade); ?>';
+                const parallel = '<?php echo urlencode($parallel); ?>';
+                const level = '<?php echo urlencode($level); ?>';
+                window.open(`vistaPDFv.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
+                bootstrap.Modal.getInstance(printModal).hide(); // Close modal after redirect
+            });
+
+            printHorizontalButton.addEventListener('click', function() {
+                const grade = '<?php echo urlencode($grade); ?>';
+                const parallel = '<?php echo urlencode($parallel); ?>';
+                const level = '<?php echo urlencode($level); ?>';
+                window.open(`vistaPDFh.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
+                bootstrap.Modal.getInstance(printModal).hide(); // Close modal after redirect
+            });
+
 
             forms.forEach(form => {
                 const select = form.querySelector('.estado-select');
