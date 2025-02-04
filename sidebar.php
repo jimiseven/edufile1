@@ -29,10 +29,17 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <i class="bi bi-people"></i> Estudiantes
         </a>
 
-        <!-- Enlace para Imprimir Listas -->
+        <!-- Enlace para Imprimir Listas - Respaldo -->
         <div class="mt-3">
             <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#listOptionsModal">
                 <i class="bi bi-printer"></i> Imprimir Listas - Respaldo
+            </a>
+        </div>
+
+        <!-- Enlace para Log acciones -->
+        <div class="mt-3">
+            <a class="nav-link text-white <?= ($currentPage == 'registroLog.php') ? 'active' : '' ?>" href="registroLog.php">
+                <i class="bi bi-file-earmark-text-fill"></i> Log acciones
             </a>
         </div>
     </nav>

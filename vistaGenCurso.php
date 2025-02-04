@@ -303,7 +303,7 @@
                 const grade = '<?php echo urlencode($grade); ?>';
                 const parallel = '<?php echo urlencode($parallel); ?>';
                 const level = '<?php echo urlencode($level); ?>';
-                window.open(`vistaPDF.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
+                window.open(`vistaPDFv.php?grade=${grade}&parallel=${parallel}&level=${level}`, '_blank');
                 bootstrap.Modal.getInstance(printModal).hide(); // Close modal after redirect
             });
 
