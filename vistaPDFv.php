@@ -4,62 +4,143 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Estudiantes</title>
-    <!-- Incluye tus enlaces a CSS y otros elementos del head aquí -->
     <style>
         body {
             background-color: #ffffff;
             color: #000000;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 10.79cm; /* Nueva dimensión: ancho */
+            height: 35.56cm; /* Nueva dimensión: alto */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            width: 100%;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 14px;
             font-weight: bold;
+            margin: 2px 0;
         }
 
         .header h2 {
-            font-size: 18px;
-            margin: 5px 0;
+            font-size: 11px;
+            margin: 1px 0;
         }
 
         .btn-print {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 5px;
+            right: 5px;
+            font-size: 10px;
+            padding: 3px 6px;
         }
 
         .table-container {
-            margin: 0 auto;
-            width: 90%;
+            width: 95%; /* Ajuste para márgenes dentro del contenedor */
+            margin: 0 auto; /* Centrar el contenedor */
         }
 
         .table {
-            width: 100%;
+            width: 100%; /* La tabla ocupa todo el ancho del contenedor */
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 5px;
+            font-size: 8px;
         }
 
         .table th,
         .table td {
             border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-            font-size: 10px;
+            padding: 1px;
+            text-align: left;
         }
 
         .table th {
             background-color: #1F618D;
             color: #ffffff;
+            text-align: center;
         }
 
+        /* Ajustar el ancho de la columna del número */
+        .table th:nth-child(1),
+        .table td:nth-child(1) {
+            width: 10%; /* Ancho ajustado para una sola columna - Más angosta */
+            text-align: center;
+            padding: 1px;
+        }
+
+        /* Ajustar el ancho de la columna de nombres combinados */
+        .table th:nth-child(2),
+        .table td:nth-child(2) {
+            width: 70%; /* Ancho ajustado para una sola columna - Más angosta */
+            text-align: left;
+            padding-left: 3px;
+            font-size: 10px; /* Aumentando el tamaño de la letra de los nombres */
+        }
+
+
         @media print {
+            body {
+                width: 10.79cm; /* Nueva dimensión: ancho en impresión */
+                height: 35.56cm; /* Nueva dimensión: alto en impresión */
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+            }
+
             .btn-print {
                 display: none;
+            }
+
+            .header h1 {
+                font-size: 12px;
+            }
+
+            .header h2 {
+                font-size: 9px;
+            }
+
+            .table-container {
+                width: 100%;
+                padding: 0;
+            }
+
+            .table {
+                width: 100%;
+                font-size: 7px;
+                margin-top: 2px;
+            }
+
+            .table th,
+            .table td {
+                padding: 1px;
+                text-align: left;
+            }
+             /* Ajustar el ancho de la columna del número en impresión */
+            .table th:nth-child(1),
+            .table td:nth-child(1) {
+                width: 10%; /* Ancho ajustado para una sola columna en impresión - Más angosta */
+                text-align: center;
+                padding: 1px;
+            }
+            /* Ajustar el ancho de la columna de nombres combinados en impresión */
+            .table th:nth-child(2),
+            .table td:nth-child(2) {
+                width: 70%; /* Ancho ajustado para una sola columna en impresión - Más angosta */
+                text-align: left;
+                padding-left: 2px;
+                font-size: 11px; /* Aumentando el tamaño de la letra de los nombres en impresion */
             }
         }
     </style>
@@ -111,9 +192,10 @@
     }
 
     // Obtener estudiantes con estado "Efectivo - I" para el curso específico
-    $query = "SELECT UPPER(s.last_name_father) AS last_name_father,
-                     UPPER(s.last_name_mother) AS last_name_mother,
-                     UPPER(s.first_name) AS first_name
+    $query = "SELECT
+                UPPER(s.last_name_father) AS last_name_father,
+                UPPER(s.last_name_mother) AS last_name_mother,
+                UPPER(s.first_name) AS first_name
               FROM students s
               INNER JOIN student_courses sc ON s.id = sc.student_id
               WHERE sc.course_id = ? AND sc.status = 'Efectivo - I'
@@ -142,57 +224,35 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>APELLIDO PATERNO</th>
-                    <th>APELLIDO MATERNO</th>
-                    <th>NOMBRE</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>APELLIDOS Y NOMBRES</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $index = 1;
-                $maxRows = 27;
+                $maxRows = 35;
 
                 if ($result && $result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        $fullName = htmlspecialchars($row['last_name_father']) . ' ' . htmlspecialchars($row['last_name_mother']) . ', ' . htmlspecialchars($row['first_name']);
                         echo "<tr>
                                 <td>{$index}</td>
-                                <td>" . htmlspecialchars($row['last_name_father']) . "</td>
-                                <td>" . htmlspecialchars($row['last_name_mother']) . "</td>
-                                <td>" . htmlspecialchars($row['first_name']) . "</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{$fullName}</td>
                               </tr>";
                         $index++;
+                        if ($index > $maxRows) break;
                     }
                 } else {
-                    echo "<tr><td colspan='9'>No se encontraron estudiantes con el estado 'Efectivo - I' para este curso.</td></tr>";
+                    echo "<tr><td colspan='2'>No se encontraron estudiantes con el estado 'Efectivo - I' para este curso.</td></tr>";
                 }
 
-                // Agregar filas vacías si no se alcanzan las 27
+                // Agregar filas vacías si no se alcanzan las 35
                 for ($i = $index; $i <= $maxRows; $i++) {
                     echo "<tr>
                             <td>{$i}</td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                           </tr>";
                 }
-
-                $stmt->close();
-                $conn->close();
                 ?>
             </tbody>
         </table>
