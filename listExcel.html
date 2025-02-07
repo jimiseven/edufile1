@@ -5,9 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generar Excel con JavaScript</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover { background-color: #45a049; }
+    </style>
 </head>
 <body>
-    <button onclick="generateExcel()">Generar Excel</button>
+    <button onclick="generateExcel()">Generar Excel de Estudiantes</button>
 
     <script>
         function generateExcel() {
@@ -16,35 +29,50 @@
                 .then(data => {
                     const workbook = XLSX.utils.book_new();
 
-                    // Estilos comunes
+                    // Estilos mejorados - Color de encabezado resaltado
                     const headerStyle = {
-                        font: { bold: true, color: { rgb: "FFFFFF" } },
-                        fill: { fgColor: { rgb: "4F81BD" } },
-                        alignment: { horizontal: "center" },
+                        font: { bold: true, color: { rgb: "FFFFFF" }, size: 12, name: 'Calibri' },
+                        fill: { fgColor: { rgb: "4472C4" } }, // Azul más fuerte y resaltado para encabezados
+                        alignment: { horizontal: "center", vertical: "center", wrapText: true },
                         border: {
                             top: { style: "thin", color: { rgb: "000000" } },
                             bottom: { style: "thin", color: { rgb: "000000" } },
                             left: { style: "thin", color: { rgb: "000000" } },
-                            right: { style: "thin", color: { rgb: "000000" } },
+                            right: { style: "thin", color: { rgb: "000000" } }
                         }
                     };
                     const headerCourseStyle = {
-                        font: { bold: true, size: 16 }, // Aumentar tamaño de fuente
-                        alignment: { horizontal: "center" }
+                        font: { bold: true, size: 18, name: 'Calibri', color: { rgb: "003366" } },
+                        alignment: { horizontal: "center", vertical: "center" }
                     };
                     const dataStyle = {
+                        font: { name: 'Calibri', size: 11 },
+                        alignment: { vertical: "center" },
                         border: {
-                            top: { style: "thin", color: { rgb: "000000" } },
-                            bottom: { style: "thin", color: { rgb: "000000" } },
-                            left: { style: "thin", color: { rgb: "000000" } },
-                            right: { style: "thin", color: { rgb: "000000" } },
+                            top: { style: "thin", color: { rgb: "D4D4D4" } },
+                            bottom: { style: "thin", color: { rgb: "D4D4D4" } },
+                            left: { style: "thin", color: { rgb: "D4D4D4" } },
+                            right: { style: "thin", color: { rgb: "D4D4D4" } }
                         }
                     };
 
-                    // Opciones de estilo de tabla
+                    // Estilo de tabla más moderno
                     const tableStyle = {
-                        theme: "TableStyleMedium2", // Puedes cambiar el tema de la tabla
-                        showRowStripes: true, // Filas con bandas de color
+                        theme: "TableStyleMedium9",
+                        showRowStripes: true,
+                        showFirstColumn: false,
+                        showLastColumn: false,
+                        showColumnHeaders: true,
+                        showTotalRow: false
+                    };
+
+                    // Mapeo de niveles a colores (opcional, si aún quieres colores de pestaña)
+                    const levelColors = {
+                        "PRIMARIA": "lightblue",
+                        "SECUNDARIA": "lightgreen",
+                        "INICIAL": "lightyellow",
+                        "BACHILLERATO": "lightcoral"
+                        // Agrega más niveles y colores según sea necesario
                     };
 
                     // Crear una hoja de cálculo para cada curso
@@ -61,38 +89,43 @@
                                 student.status
                             ]);
 
-                            // Crear hoja de cálculo con encabezado de curso y luego los datos
+                            // Crear hoja de cálculo
                             const wsData = [
-                                [{ v: courseKey, s: headerCourseStyle }], // Encabezado del curso (más grande)
-                                headers.map(header => ({ v: header, s: headerStyle })), // Encabezados de columna con estilo
-                                ...formattedData.map(row => row.map(cell => ({ v: cell, s: dataStyle }))) // Datos con estilo
+                                [{ v: courseKey, s: headerCourseStyle }],
+                                headers.map(header => ({ v: header, s: headerStyle })), // Usa headerStyle para los encabezados de columna
+                                ...formattedData.map(row => row.map(cell => ({ v: cell, s: dataStyle })))
                             ];
                             const worksheet = XLSX.utils.aoa_to_sheet(wsData);
                             const range = XLSX.utils.decode_range(worksheet['!ref']);
 
-                            // Definir rango de la tabla (excluyendo el título del curso)
+                            // Definir rango de la tabla
                             const tableDefinition = {
-                                name: `Tabla_${courseKey.replace(/ /g, '_')}`, // Nombre de la tabla
-                                ref: XLSX.utils.encode_range({ s: { r: 1, c: 0 }, e: range.e }), // Rango desde la fila de encabezados hacia abajo
+                                name: `Tabla_${courseKey.replace(/ /g, '_')}`,
+                                ref: XLSX.utils.encode_range({ s: { r: 1, c: 0 }, e: range.e }),
                                 headerRow: true,
                                 tableStyles: tableStyle,
                             };
 
-                            // Añadir definición de tabla a la hoja
+                            // Añadir definición de tabla y autofiltro
                             worksheet['!tables'] = [tableDefinition];
-                            // Añadir filtro a la tabla (automáticamente incluye los encabezados)
-                            worksheet['!autofilter'] = {
-                                ref: tableDefinition.ref // Aplicar filtro al mismo rango de la tabla
-                            };
+                            worksheet['!autofilter'] = { ref: tableDefinition.ref };
 
-
-                            // Ajustar ancho de columnas automáticamente
-                            const cols = [];
-                            for (let i = 0; i < headers.length; i++) {
-                                cols.push({ wch: 25 }); // Ancho un poco mayor
-                            }
+                            // Ajustar anchos de columna
+                            const cols = [
+                                { wch: 35 },
+                                { wch: 15 },
+                                { wch: 12 },
+                                { wch: 8 },
+                                { wch: 10 },
+                                { wch: 20 }
+                            ];
                             worksheet['!cols'] = cols;
+                            worksheet['!rows'] = [{ hpx: 30 }, { hpx: 25 }];
 
+                            // Establecer color de pestaña basado en el nivel (opcional)
+                            const levelName = courseKey.split(' ')[0].toUpperCase();
+                            const tabColor = levelColors[levelName] || "white";
+                            worksheet.sheetProps = { tabColor: tabColor };
 
                             XLSX.utils.book_append_sheet(workbook, worksheet, courseKey);
                         }
