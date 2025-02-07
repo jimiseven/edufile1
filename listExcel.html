@@ -66,27 +66,14 @@
                         showTotalRow: false
                     };
 
-                    // Mapeo de niveles a colores (opcional, si aún quieres colores de pestaña)
-                    const levelColors = {
-                        "PRIMARIA": "lightblue",
-                        "SECUNDARIA": "lightgreen",
-                        "INICIAL": "lightyellow",
-                        "BACHILLERATO": "lightcoral"
-                        // Agrega más niveles y colores según sea necesario
-                    };
-
                     // Crear una hoja de cálculo para cada curso
                     for (const courseKey in data) {
                         if (data.hasOwnProperty(courseKey)) {
                             const courseData = data[courseKey];
-                            const headers = ["Nombre Completo", "RUDE", "Nivel", "Grado", "Paralelo", "Estado"];
-                            const formattedData = courseData.map(student => [
-                                student.nombre_completo,
-                                student.rude_number,
-                                student.nivel,
-                                student.grade,
-                                student.parallel,
-                                student.status
+                            const headers = ["Nº", "Nombre Completo"]; // Encabezado con numeración
+                            const formattedData = courseData.map((student, index) => [
+                                index + 1, // Numeración iniciando en 1
+                                student.nombre_completo // Nombre completo
                             ]);
 
                             // Crear hoja de cálculo
@@ -110,22 +97,14 @@
                             worksheet['!tables'] = [tableDefinition];
                             worksheet['!autofilter'] = { ref: tableDefinition.ref };
 
-                            // Ajustar anchos de columna
+                            // Ajustar anchos de columna - Dos columnas ahora
                             const cols = [
-                                { wch: 35 },
-                                { wch: 15 },
-                                { wch: 12 },
-                                { wch: 8 },
-                                { wch: 10 },
-                                { wch: 20 }
+                                { wch: 5 },  // Ancho para la columna de numeración
+                                { wch: 40 }  // Ancho para la columna de Nombre Completo
                             ];
                             worksheet['!cols'] = cols;
                             worksheet['!rows'] = [{ hpx: 30 }, { hpx: 25 }];
 
-                            // Establecer color de pestaña basado en el nivel (opcional)
-                            const levelName = courseKey.split(' ')[0].toUpperCase();
-                            const tabColor = levelColors[levelName] || "white";
-                            worksheet.sheetProps = { tabColor: tabColor };
 
                             XLSX.utils.book_append_sheet(workbook, worksheet, courseKey);
                         }
