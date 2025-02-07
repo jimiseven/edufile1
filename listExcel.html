@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Excel con JavaScript</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <button onclick="generateExcel()">Generar Excel</button>
+
+    <script>
+        function generateExcel() {
+            fetch('obtenerDatos.php')
+                .then(response => response.json())
+                .then(data => {
+                    const workbook = XLSX.utils.book_new();
+
+                    // Estilos comunes
+                    const headerStyle = {
+                        font: { bold: true, color: { rgb: "FFFFFF" } },
+                        fill: { fgColor: { rgb: "4F81BD" } },
+                        alignment: { horizontal: "center" },
+                        border: {
+                            top: { style: "thin", color: { rgb: "000000" } },
+                            bottom: { style: "thin", color: { rgb: "000000" } },
+                            left: { style: "thin", color: { rgb: "000000" } },
+                            right: { style: "thin", color: { rgb: "000000" } },
+                        }
+                    };
+                    const headerCourseStyle = {
+                        font: { bold: true, size: 16 }, // Aumentar tamaño de fuente
+                        alignment: { horizontal: "center" }
+                    };
+                    const dataStyle = {
+                        border: {
+                            top: { style: "thin", color: { rgb: "000000" } },
+                            bottom: { style: "thin", color: { rgb: "000000" } },
+                            left: { style: "thin", color: { rgb: "000000" } },
+                            right: { style: "thin", color: { rgb: "000000" } },
+                        }
+                    };
+
+                    // Opciones de estilo de tabla
+                    const tableStyle = {
+                        theme: "TableStyleMedium2", // Puedes cambiar el tema de la tabla
+                        showRowStripes: true, // Filas con bandas de color
+                    };
+
+                    // Crear una hoja de cálculo para cada curso
+                    for (const courseKey in data) {
+                        if (data.hasOwnProperty(courseKey)) {
+                            const courseData = data[courseKey];
+                            const headers = ["Nombre Completo", "RUDE", "Nivel", "Grado", "Paralelo", "Estado"];
+                            const formattedData = courseData.map(student => [
+                                student.nombre_completo,
+                                student.rude_number,
+                                student.nivel,
+                                student.grade,
+                                student.parallel,
+                                student.status
+                            ]);
+
+                            // Crear hoja de cálculo con encabezado de curso y luego los datos
+                            const wsData = [
+                                [{ v: courseKey, s: headerCourseStyle }], // Encabezado del curso (más grande)
+                                headers.map(header => ({ v: header, s: headerStyle })), // Encabezados de columna con estilo
+                                ...formattedData.map(row => row.map(cell => ({ v: cell, s: dataStyle }))) // Datos con estilo
+                            ];
+                            const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+                            const range = XLSX.utils.decode_range(worksheet['!ref']);
+
+                            // Definir rango de la tabla (excluyendo el título del curso)
+                            const tableDefinition = {
+                                name: `Tabla_${courseKey.replace(/ /g, '_')}`, // Nombre de la tabla
+                                ref: XLSX.utils.encode_range({ s: { r: 1, c: 0 }, e: range.e }), // Rango desde la fila de encabezados hacia abajo
+                                headerRow: true,
+                                tableStyles: tableStyle,
+                            };
+
+                            // Añadir definición de tabla a la hoja
+                            worksheet['!tables'] = [tableDefinition];
+                            // Añadir filtro a la tabla (automáticamente incluye los encabezados)
+                            worksheet['!autofilter'] = {
+                                ref: tableDefinition.ref // Aplicar filtro al mismo rango de la tabla
+                            };
+
+
+                            // Ajustar ancho de columnas automáticamente
+                            const cols = [];
+                            for (let i = 0; i < headers.length; i++) {
+                                cols.push({ wch: 25 }); // Ancho un poco mayor
+                            }
+                            worksheet['!cols'] = cols;
+
+
+                            XLSX.utils.book_append_sheet(workbook, worksheet, courseKey);
+                        }
+                    }
+
+                    // Descargar el archivo Excel
+                    XLSX.writeFile(workbook, "ListaEstudiantes.xlsx");
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos:', error);
+                });
+        }
+    </script>
+</body>
+</html>

@@ -57,6 +57,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <div class="d-grid gap-2">
                         <a href="imprimirListas.php" class="btn btn-info" target="_blank">Listas Completas</a>
                         <a href="imprimirListas2.php" class="btn btn-info" target="_blank">Listas de Efectivos</a>
+                        <a href="listExcel.html" class="btn btn-info" target="_blank">Listas Excel</a>
                     </div>
                 </div>
                 <div class="modal-footer">
