@@ -1,0 +1,68 @@
+MIGRACION MVC - EDUFILE
+=======================
+
+Estado actual
+-------------
+Se creo una primera base MVC paralela al sistema existente para no romper las pantallas actuales.
+
+Nueva ruta de entrada:
+- public/index.php?route=students
+
+Modulos migrados hasta ahora:
+- Listado de estudiantes.
+- Formulario de registro de estudiantes.
+- Guardado de estudiantes con validacion de duplicados y asignacion de curso.
+
+Archivos creados:
+- config/database.php
+- app/Core/Database.php
+- app/Core/Controller.php
+- app/Core/Router.php
+- app/Models/Student.php
+- app/Models/Level.php
+- app/Models/Course.php
+- app/Models/StudentCourse.php
+- app/Controllers/StudentController.php
+- app/Views/layouts/main.php
+- app/Views/layouts/sidebar.php
+- app/Views/students/index.php
+- app/Views/students/create.php
+- public/index.php
+
+Como queda separado el modulo migrado
+------------------------------------
+Modelo:
+- app/Models/Student.php contiene la consulta SQL del listado.
+- app/Models/Student.php tambien valida duplicados por CI/RUDE y crea estudiantes.
+- app/Models/Level.php lista niveles.
+- app/Models/Course.php lista cursos y busca cursos por nivel/curso/paralelo.
+- app/Models/StudentCourse.php asigna el curso inicial al estudiante.
+
+Controlador:
+- app/Controllers/StudentController.php recibe la solicitud, llama al modelo y envia datos a la vista.
+- app/Controllers/StudentController.php tambien contiene las acciones create() y store() para registrar estudiantes.
+
+Vista:
+- app/Views/students/index.php renderiza la tabla y la busqueda local.
+- app/Views/students/create.php renderiza el formulario de registro MVC.
+- app/Views/layouts/main.php contiene el layout general.
+- app/Views/layouts/sidebar.php contiene la navegacion.
+
+Compatibilidad
+--------------
+El sistema anterior sigue funcionando con sus archivos originales.
+Desde el listado MVC, los botones de edicion siguen apuntando temporalmente a editarEstudiante.php hasta migrar edicion, actualizacion y eliminacion.
+
+Rutas MVC actuales
+------------------
+- GET public/index.php?route=students
+- GET public/index.php?route=students/create
+- POST public/index.php?route=students/store
+
+Siguientes pasos recomendados
+-----------------------------
+1. Migrar editar estudiante: formulario, actualizar y eliminar.
+2. Migrar vista por curso y cambio de estado AJAX.
+3. Migrar cambio de curso.
+4. Migrar dashboard y reportes.
+5. Cuando todo este migrado, dejar public/index.php como entrada principal y retirar archivos duplicados o antiguos.
