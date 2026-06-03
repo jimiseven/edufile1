@@ -1,0 +1,246 @@
+RESUMEN TECNICO DEL PROYECTO EDUFILE
+====================================
+
+1. Descripcion general
+----------------------
+EduFile es una aplicacion web local para gestion academica de estudiantes de una unidad educativa. Esta orientada a registrar, consultar, editar, cambiar de curso, controlar estados de inscripcion y generar listas imprimibles por nivel, curso y paralelo.
+
+El sistema trabaja principalmente con estudiantes, niveles educativos, cursos/paralelos y la relacion entre estudiantes y cursos. Por los textos visibles en las pantallas y reportes, el caso de uso corresponde a una unidad educativa llamada "U.E. Simon Bolivar".
+
+Funciones principales:
+- Dashboard estadistico general por sexo, nivel, curso y estado.
+- Listado general de estudiantes con busqueda y acceso a edicion.
+- Registro de nuevos estudiantes con datos personales, academicos y responsable/tutor.
+- Validacion de duplicados por CI y RUDE.
+- Edicion de datos del estudiante, responsable y estado de inscripcion.
+- Cambio de nivel, curso y paralelo por RUDE.
+- Eliminacion de estudiantes y sus relaciones con cursos.
+- Vista de estudiantes por curso con conteos de efectivos, no inscritos, masculinos y femeninos.
+- Cambio rapido de estado por curso mediante peticiones AJAX.
+- Generacion de vistas imprimibles tipo PDF/listas usando HTML, CSS y window.print().
+- Exportacion/listado para Excel mediante listExcel.html y el endpoint obtenerDatos.php.
+- Registro simple de ultimos estudiantes creados en registroLog.php.
+
+2. Tecnologias utilizadas
+-------------------------
+Backend:
+- PHP procedural.
+- mysqli para conexion y consultas a base de datos.
+- Uso parcial de sentencias preparadas con prepare/bind_param.
+- No se encontro composer.json, por lo tanto no usa Composer ni framework PHP formal como Laravel, Symfony o CodeIgniter.
+
+Base de datos:
+- MariaDB/MySQL.
+- Dump disponible en bd/bd_edufile3.sql.
+- Base de datos configurada: bd_edufile3.
+- Conexion por defecto en conexion.php: host localhost, usuario root, password vacio.
+
+Frontend:
+- HTML, CSS y JavaScript vanilla.
+- Bootstrap local en css/bootstrap*.css y js/bootstrap*.js.
+- Bootstrap Icons cargado desde CDN: cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5.
+- Estilos mayormente inline o embebidos por pagina, mas css/styles.css compartido.
+
+Generacion de reportes:
+- No se encontro libreria PDF dedicada.
+- Las paginas vistaPDFh.php, vistaPDFv.php, imprimirListas.php e imprimirListas2.php generan HTML preparado para impresion y usan window.print() o enlace javascript:window.print().
+
+Herramientas incluidas:
+- adminer-5.3.0-mysql.php para administracion de base de datos.
+- bd/cambios.bat posiblemente para tareas locales de base de datos.
+
+3. Arquitectura del proyecto
+----------------------------
+La aplicacion tiene una arquitectura monolitica y procedural basada en archivos PHP independientes. No hay separacion formal en capas MVC, controladores, servicios o modelos como clases. Cada archivo suele combinar logica de consulta, procesamiento de formularios, HTML, CSS y JavaScript.
+
+Patron general:
+- conexion.php centraliza la conexion mysqli.
+- sidebar.php centraliza la navegacion lateral.
+- Las paginas principales incluyen conexion.php y/o sidebar.php.
+- Las acciones CRUD estan implementadas como scripts PHP separados que reciben GET o POST.
+- Algunos scripts devuelven JSON para uso AJAX desde JavaScript.
+- La navegacion se realiza mediante enlaces, formularios HTML y redirecciones header("Location: ...").
+
+Estructura relevante:
+- index.php: dashboard estadistico general.
+- estudiantes.php: listado general de estudiantes.
+- nuevoRegistroEstudiante.php: formulario actual de registro completo.
+- guardarNuevoEstudiante.php: guarda estudiante y asigna curso.
+- editarEstudiante.php: formulario de edicion.
+- actualizarEstudiante.php: actualiza datos del estudiante y estado.
+- eliminarEstudiante.php: elimina estudiante y relacion con curso dentro de una transaccion.
+- cambioCurso.php: busca estudiante por RUDE y cambia nivel/curso/paralelo.
+- vistaGenCurso.php: vista por curso con estadisticas, listado y cambio de estado.
+- cambiarEstado.php: endpoint POST JSON para actualizar estado en student_courses.
+- verificarEstudiante.php: endpoint POST JSON para detectar CI o RUDE duplicados.
+- getCourses.php: endpoint JSON para obtener cursos por nivel.
+- getParallels.php: endpoint JSON para obtener paralelos por curso y nivel.
+- tabla_cursos.php y obtener_cursos.php: tablas parciales con estadisticas por curso.
+- imprimirListas.php, imprimirListas2.php: listados imprimibles por cursos.
+- vistaPDFh.php y vistaPDFv.php: vistas imprimibles horizontal/vertical de estudiantes efectivos por curso.
+- volanteEstudiante.php: volante imprimible individual del estudiante.
+- obtenerDatos.php: endpoint JSON agrupado por curso para listas/exportacion.
+- registroLog.php: muestra los ultimos 10 estudiantes registrados.
+- inicialCursos.php, primariaCursos.php, secundariaCursos.php: vistas de navegacion/listado por nivel.
+- css/: Bootstrap local y estilos propios.
+- js/: Bootstrap local y script.js.
+- bd/: dump SQL de la base de datos.
+
+4. Modelo de datos
+------------------
+El modelo de datos principal esta definido en bd/bd_edufile3.sql.
+
+Tablas principales:
+
+levels
+- id: bigint, clave primaria autoincremental.
+- name: nombre del nivel.
+- Datos iniciales: Inicial, Primario, Secundario.
+
+courses
+- id: bigint, clave primaria autoincremental.
+- level_id: referencia a levels.id.
+- grade: grado/curso numerico.
+- parallel: enum('A','B','C').
+- Datos iniciales: 42 cursos/paralelos distribuidos en Inicial, Primario y Secundario.
+
+students
+- id: bigint, clave primaria autoincremental.
+- first_name: nombres del estudiante.
+- last_name_father: apellido paterno.
+- last_name_mother: apellido materno.
+- gender: M o F.
+- rude_number: codigo RUDE.
+- identity_card: CI.
+- birth_date: fecha de nacimiento.
+- guardian_first_name: nombres del responsable.
+- guardian_last_name: apellidos del responsable.
+- guardian_identity_card: CI del responsable.
+- guardian_phone_number: telefono del responsable.
+- guardian_relationship: enum('padre','madre','tutor').
+
+student_courses
+- student_id: referencia a students.id.
+- course_id: referencia a courses.id.
+- status: estado del estudiante en el curso.
+- Clave primaria compuesta: student_id + course_id.
+- Estados usados en la aplicacion: Efectivo - I, No Inscrito. En cambiarEstado.php tambien aparecen Efectivo - T, Traslado y Retirado, aunque la interfaz principal usa principalmente los dos primeros.
+
+Relaciones:
+- levels 1:N courses.
+- students N:M courses mediante student_courses, aunque en la practica la app parece manejar un curso activo por estudiante.
+- student_courses guarda tambien el estado de inscripcion del estudiante en ese curso.
+
+5. Flujos principales
+---------------------
+Registro de estudiante:
+- Usuario entra a nuevoRegistroEstudiante.php.
+- Selecciona nivel, curso y paralelo.
+- Completa datos personales, RUDE/CI, fecha de nacimiento y datos opcionales del responsable.
+- JavaScript valida apellido minimo y consulta verificarEstudiante.php para duplicados.
+- guardarNuevoEstudiante.php vuelve a validar CI/RUDE, inserta en students, busca course_id y crea student_courses con estado Efectivo - I.
+- Redirige a vistaGenCurso.php para el curso asignado.
+
+Listado y busqueda:
+- estudiantes.php consulta students, student_courses, courses y levels.
+- Ordena alfabeticamente por apellidos y nombres.
+- Permite busqueda en cliente por nombre/apellidos/RUDE.
+- El boton Editar abre editarEstudiante.php usando rude_number como identificador en la URL.
+
+Edicion:
+- editarEstudiante.php carga datos por rude_number.
+- Permite editar datos del estudiante, responsable y estado.
+- actualizarEstudiante.php valida que el nuevo RUDE no exista en otro estudiante.
+- Actualiza students y student_courses dentro de una transaccion.
+- Redirige a estudiantes.php con status=updated.
+
+Eliminacion:
+- eliminarEstudiante.php recibe student_id en GET, pero realmente espera el RUDE.
+- Busca el id interno del estudiante.
+- En transaccion elimina primero student_courses y luego students.
+- Redirige a estudiantes.php con status=deleted o error.
+
+Cambio de curso:
+- cambioCurso.php busca por RUDE.
+- Muestra datos actuales y combos de nivel, curso y paralelo.
+- getCourses.php y getParallels.php alimentan selects dinamicos.
+- Al actualizar, busca course_id y modifica student_courses.course_id.
+
+Vista por curso:
+- vistaGenCurso.php recibe level, grade y parallel por GET.
+- Calcula conteos por estado y sexo.
+- Lista estudiantes del curso.
+- Permite busqueda local.
+- Permite cambiar estado por AJAX hacia cambiarEstado.php.
+- Permite editar estudiante y abrir vistas imprimibles.
+
+Dashboard:
+- index.php calcula totales globales, por nivel y por curso.
+- Usa agregaciones SQL con SUM(CASE WHEN ...).
+- Muestra hombres, mujeres, efectivos y no inscritos.
+
+Reportes e impresion:
+- vistaPDFh.php: lista imprimible horizontal para un curso.
+- vistaPDFv.php: lista imprimible vertical para un curso.
+- imprimirListas.php: listas completas por todos los cursos, con efectivos y no inscritos.
+- imprimirListas2.php: variante para efectivos.
+- volanteEstudiante.php: volante individual con datos del estudiante/responsable.
+- obtenerDatos.php: JSON agrupado por curso, pensado para listExcel.html.
+
+6. Seguridad y calidad tecnica observada
+----------------------------------------
+Aspectos positivos:
+- Muchas consultas importantes usan prepared statements.
+- Se usa htmlspecialchars en varias salidas HTML para reducir riesgo de XSS.
+- Algunas operaciones criticas usan transacciones, como actualizacion y eliminacion.
+- Hay validacion de duplicados por CI y RUDE en registro.
+- La base de datos tiene claves foraneas entre niveles, cursos, estudiantes y relacion estudiante-curso.
+
+Riesgos o puntos a revisar:
+- No hay autenticacion ni autorizacion visible. Cualquier usuario con acceso podria registrar, editar, eliminar o cambiar estados.
+- conexion.php contiene credenciales en texto plano y usa root sin password, adecuado solo para entorno local.
+- Hay archivos antiguos o duplicados como nuevoEstudiante.php y guardarEstudiante.php que usan SQL concatenado y no asignan correctamente student_courses; deberian revisarse si siguen accesibles.
+- Algunas consultas aun concatenan parametros en SQL, por ejemplo filtros en tabla_cursos.php/obtener_cursos.php y consultas de imprimirListas.php.
+- No hay CSRF tokens en formularios de alta, edicion, eliminacion o cambio de curso.
+- eliminarEstudiante.php elimina por GET, lo que es riesgoso para acciones destructivas.
+- La tabla students no declara restricciones UNIQUE para rude_number o identity_card; la unicidad depende de validaciones de aplicacion.
+- No hay gestion de sesiones ni auditoria real. registroLog.php solo muestra los ultimos 10 estudiantes por id descendente, no un log historico de acciones.
+- Hay inconsistencia de nombres de nivel: en SQL aparece Primario/Secundario, mientras algunas pantallas o arreglos usan Primaria/Secundaria.
+- El proyecto mezcla HTML, CSS, JS y SQL en los mismos archivos, lo que dificulta mantenimiento y pruebas.
+- No se encontraron pruebas automatizadas.
+- No se encontro README ni documentacion tecnica previa.
+- Se incluye adminer-5.3.0-mysql.php dentro del proyecto; en produccion seria recomendable restringirlo o removerlo.
+
+7. Dependencias externas y ejecucion local
+------------------------------------------
+No hay instalacion por Composer ni npm. La ejecucion esperada parece ser directa en XAMPP/Apache con PHP y MariaDB/MySQL.
+
+Pasos generales para levantarlo localmente:
+- Colocar el proyecto en htdocs, como C:\xampp\htdocs\edufile1.
+- Crear/importar la base bd_edufile3 desde bd/bd_edufile3.sql.
+- Verificar credenciales en conexion.php.
+- Abrir http://localhost/edufile1/index.php.
+
+Requisitos probables:
+- PHP 8.x, el dump indica PHP 8.1.6 al momento de exportacion.
+- MariaDB 10.4.x o MySQL compatible, el dump indica MariaDB 10.4.24.
+- Apache/XAMPP.
+
+8. Archivos mas importantes para revision del caso
+--------------------------------------------------
+- conexion.php: configuracion de BD.
+- bd/bd_edufile3.sql: estructura y datos del sistema.
+- index.php: dashboard y consultas estadisticas.
+- estudiantes.php: listado general.
+- nuevoRegistroEstudiante.php y guardarNuevoEstudiante.php: alta de estudiantes.
+- editarEstudiante.php y actualizarEstudiante.php: edicion.
+- cambioCurso.php, getCourses.php, getParallels.php: cambio academico de curso/paralelo.
+- vistaGenCurso.php y cambiarEstado.php: gestion por curso y estados.
+- imprimirListas.php, imprimirListas2.php, vistaPDFh.php, vistaPDFv.php, volanteEstudiante.php: reportes imprimibles.
+- sidebar.php: navegacion principal.
+
+9. Conclusion
+-------------
+EduFile es un sistema escolar local de gestion de estudiantes construido con PHP procedural, MySQL/MariaDB y Bootstrap. Su nucleo funcional es administrar estudiantes por nivel, curso y paralelo, controlar estados de inscripcion y generar listados/reportes imprimibles para gestion administrativa.
+
+Para una revision del caso, lo mas importante es evaluar el modelo de datos students/courses/levels/student_courses, los flujos de registro-edicion-cambio de curso, las vistas estadisticas y las necesidades de seguridad si el sistema fuera a usarse fuera de un entorno local controlado.
